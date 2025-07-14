@@ -1,0 +1,1155 @@
+<!-- Chat MCP Section -->
+<div class="content-section" id="chat-mcp">
+    <div class="header">
+        <h1><i class="fas fa-robot"></i> Chat MCP - Asistente Inteligente</h1>
+        <p>Consulte datos del sistema y genere documentos con nuestro asistente IA</p>
+    </div>
+    
+    <div class="chat-container">
+        <!-- Chat Interface -->
+        <div class="chat-interface">
+            <div class="chat-header">
+                <div class="chat-status">
+                    <div class="status-indicator online"></div>
+                    <div class="status-info">
+                        <h3>Asistente MCP GoManage</h3>
+                        <p>En línea - Listo para ayudar</p>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button class="btn-icon" onclick="clearChat()" title="Limpiar chat">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="btn-icon" onclick="exportChat()" title="Exportar conversación">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            ¡Hola! Soy el asistente MCP de GoManage. Puedo ayudarte con:
+                            <ul>
+                                <li>📊 Consultas sobre clientes y pedidos</li>
+                                <li>📈 Análisis de datos y estadísticas</li>
+                                <li>📄 Generación de documentos PDF</li>
+                                <li>🔍 Búsquedas avanzadas en el sistema</li>
+                                <li>💡 Sugerencias y recomendaciones</li>
+                            </ul>
+                            ¿En qué puedo ayudarte hoy?
+                        </div>
+                        <div class="message-time">Ahora</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <div class="quick-actions">
+                    <button class="quick-action" onclick="sendQuickMessage('¿Cuántos clientes tengo?')">
+                        <i class="fas fa-users"></i> Clientes
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('Muestra las ventas del mes')">
+                        <i class="fas fa-chart-line"></i> Ventas
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('Genera un reporte de clientes')">
+                        <i class="fas fa-file-pdf"></i> Reporte
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('¿Qué funciones tienes disponibles?')">
+                        <i class="fas fa-question"></i> Ayuda
+                    </button>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" 
+                           id="chatInput" 
+                           placeholder="Escribe tu pregunta aquí..." 
+                           autocomplete="off"
+                           autocapitalize="off"
+                           autocorrect="off"
+                           spellcheck="false">
+                    <button class="send-button" onclick="sendMessage()" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Document Generation Panel -->
+        <div class="document-panel">
+            <div class="panel-header">
+                <h3><i class="fas fa-file-alt"></i> Generación de Documentos</h3>
+                <button class="btn-outline" onclick="toggleDocumentPanel()">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            
+            <div class="panel-content" id="documentPanelContent">
+                <!-- Document Templates -->
+                <div class="document-templates">
+                    <h4>Plantillas Disponibles</h4>
+                    <div class="templates-grid">
+                        <div class="template-card" onclick="selectTemplate('customer-report')">
+                            <div class="template-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="template-info">
+                                <h5>Reporte de Clientes</h5>
+                                <p>Lista completa con estadísticas</p>
+                            </div>
+                        </div>
+                        
+                        <div class="template-card" onclick="selectTemplate('sales-report')">
+                            <div class="template-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="template-info">
+                                <h5>Reporte de Ventas</h5>
+                                <p>Análisis de ventas y tendencias</p>
+                            </div>
+                        </div>
+                        
+                        <div class="template-card" onclick="selectTemplate('invoice')">
+                            <div class="template-icon">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <div class="template-info">
+                                <h5>Factura</h5>
+                                <p>Generar factura para pedido</p>
+                            </div>
+                        </div>
+                        
+                        <div class="template-card" onclick="selectTemplate('delivery-note')">
+                            <div class="template-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="template-info">
+                                <h5>Albarán</h5>
+                                <p>Documento de entrega</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Document Generation Form -->
+                <div class="document-form" id="documentForm" style="display: none;">
+                    <h4>Configurar Documento</h4>
+                    <form id="generateDocumentForm">
+                        <div class="form-group">
+                            <label for="documentTitle">Título del Documento</label>
+                            <input type="text" id="documentTitle" placeholder="Ej: Reporte Mensual de Clientes">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="documentPeriod">Período</label>
+                            <select id="documentPeriod">
+                                <option value="current-month">Mes Actual</option>
+                                <option value="last-month">Mes Anterior</option>
+                                <option value="current-quarter">Trimestre Actual</option>
+                                <option value="current-year">Año Actual</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" id="customPeriodGroup" style="display: none;">
+                            <label>Período Personalizado</label>
+                            <div class="date-range">
+                                <input type="date" id="startDate">
+                                <span>hasta</span>
+                                <input type="date" id="endDate">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="documentFormat">Formato</label>
+                            <select id="documentFormat">
+                                <option value="pdf">PDF</option>
+                                <option value="excel">Excel</option>
+                                <option value="csv">CSV</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Opciones Adicionales</label>
+                            <div class="checkbox-options">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="includeCharts">
+                                    <span>Incluir gráficos</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="includeDetails">
+                                    <span>Incluir detalles</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="includeSummary" checked>
+                                    <span>Incluir resumen</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-outline" onclick="cancelDocumentGeneration()">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-file-download"></i> Generar Documento
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Recent Documents -->
+                <div class="recent-documents">
+                    <h4>Documentos Recientes</h4>
+                    <div class="documents-list" id="recentDocumentsList">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Chat MCP Styles */
+.chat-container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    background: var(--neutral-200);
+    min-height: calc(100vh - 200px);
+}
+
+.chat-interface {
+    background: var(--neutral-100);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-medium);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 280px);
+    overflow: hidden;
+}
+
+.chat-header {
+    padding: var(--spacing-lg);
+    border-bottom: 2px solid var(--neutral-300);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
+    color: white;
+}
+
+.chat-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #4CAF50;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.status-info h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.status-info p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.chat-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.btn-icon {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: var(--radius-small);
+    padding: var(--spacing-sm);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-icon:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+    background: var(--neutral-200);
+}
+
+.message {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.user {
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.message.assistant .message-avatar {
+    background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
+}
+
+.message.user .message-avatar {
+    background: linear-gradient(135deg, var(--secondary-default), var(--secondary-light));
+}
+
+.message-content {
+    max-width: 70%;
+    background: var(--neutral-100);
+    border-radius: var(--radius-medium);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-light);
+}
+
+.message.user .message-content {
+    background: var(--primary-default);
+    color: white;
+}
+
+.message-text {
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.5;
+}
+
+.message-text ul {
+    margin: var(--spacing-sm) 0;
+    padding-left: var(--spacing-lg);
+}
+
+.message-text li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.message-time {
+    font-size: 12px;
+    color: var(--text-disabled);
+    text-align: right;
+}
+
+.message.user .message-time {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.chat-input-container {
+    border-top: 2px solid var(--neutral-300);
+    background: var(--neutral-100);
+}
+
+.quick-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--neutral-300);
+    overflow-x: auto;
+}
+
+.quick-action {
+    background: var(--neutral-200);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 12px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.quick-action:hover {
+    background: var(--primary-default);
+    color: white;
+}
+
+.chat-input {
+    display: flex;
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+}
+
+.chat-input input {
+    flex: 1;
+    padding: var(--spacing-md);
+    border: 2px solid var(--neutral-300);
+    border-radius: var(--radius-medium);
+    font-size: 14px;
+    background: var(--neutral-100);
+    color: var(--text-primary);
+}
+
+.chat-input input:focus {
+    outline: none;
+    border-color: var(--primary-default);
+    box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.1);
+}
+
+.send-button {
+    background: var(--primary-default);
+    border: none;
+    border-radius: var(--radius-medium);
+    padding: var(--spacing-md);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 50px;
+}
+
+.send-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Document Panel Styles */
+.document-panel {
+    background: var(--neutral-100);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-medium);
+    height: fit-content;
+}
+
+.panel-header {
+    padding: var(--spacing-lg);
+    border-bottom: 2px solid var(--neutral-300);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, var(--secondary-default), var(--secondary-light));
+    color: white;
+    border-radius: var(--radius-large) var(--radius-large) 0 0;
+}
+
+.panel-header h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.panel-content {
+    padding: var(--spacing-lg);
+}
+
+.document-templates h4,
+.recent-documents h4 {
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--text-primary);
+}
+
+.templates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.template-card {
+    background: var(--neutral-200);
+    border-radius: var(--radius-medium);
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.template-card:hover {
+    background: var(--neutral-300);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.template-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-medium);
+    background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.template-info h5 {
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.template-info p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.document-form {
+    background: var(--neutral-200);
+    border-radius: var(--radius-medium);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.document-form h4 {
+    margin: 0 0 var(--spacing-lg) 0;
+    color: var(--text-primary);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--neutral-400);
+    border-radius: var(--radius-small);
+    background: var(--neutral-100);
+    color: var(--text-primary);
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.date-range input {
+    flex: 1;
+}
+
+.date-range span {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.checkbox-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    cursor: pointer;
+}
+
+.checkbox-option input {
+    width: auto;
+    margin: 0;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.documents-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid var(--neutral-300);
+    transition: all 0.3s ease;
+}
+
+.document-item:hover {
+    background: var(--neutral-200);
+}
+
+.document-item:last-child {
+    border-bottom: none;
+}
+
+.document-info {
+    flex: 1;
+}
+
+.document-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.document-details {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.document-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.document-action {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-small);
+    transition: all 0.3s ease;
+}
+
+.document-action:hover {
+    background: var(--neutral-300);
+    color: var(--text-primary);
+}
+
+/* Typing indicator */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 2px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    animation: typing 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .chat-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .chat-interface {
+        height: 500px;
+    }
+    
+    .templates-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .message-content {
+        max-width: 85%;
+    }
+    
+    .quick-actions {
+        flex-wrap: wrap;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .date-range {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+</style>
+
+<script>
+// Chat MCP JavaScript
+let chatHistory = [];
+let isTyping = false;
+let selectedTemplate = null;
+
+// Initialize chat when section is loaded
+function initializeChatMCP() {
+    setupChatEventListeners();
+    loadRecentDocuments();
+    
+    // Set current date for date inputs
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('endDate').value = today;
+    
+    const firstOfMonth = new Date();
+    firstOfMonth.setDate(1);
+    document.getElementById('startDate').value = firstOfMonth.toISOString().split('T')[0];
+}
+
+function setupChatEventListeners() {
+    // Enter key to send message
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    // Document period change
+    document.getElementById('documentPeriod').addEventListener('change', function() {
+        const customGroup = document.getElementById('customPeriodGroup');
+        customGroup.style.display = this.value === 'custom' ? 'block' : 'none';
+    });
+    
+    // Document form submission
+    document.getElementById('generateDocumentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        generateDocument();
+    });
+}
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message || isTyping) return;
+    
+    // Add user message
+    addMessage(message, 'user');
+    input.value = '';
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    // Send to backend
+    fetch('/api/chat/mcp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: message })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideTypingIndicator();
+        
+        if (data.status === 'success') {
+            addMessage(data.response, 'assistant');
+        } else {
+            addMessage('Lo siento, ha ocurrido un error. Por favor, inténtalo de nuevo.', 'assistant');
+        }
+    })
+    .catch(error => {
+        hideTypingIndicator();
+        console.error('Error:', error);
+        addMessage('Error de conexión. Por favor, verifica tu conexión a internet.', 'assistant');
+    });
+}
+
+function sendQuickMessage(message) {
+    document.getElementById('chatInput').value = message;
+    sendMessage();
+}
+
+function addMessage(text, sender) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}`;
+    
+    const avatar = sender === 'user' ? 
+        '<i class="fas fa-user"></i>' : 
+        '<i class="fas fa-robot"></i>';
+    
+    const time = new Date().toLocaleTimeString('es-ES', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    
+    messageDiv.innerHTML = `
+        <div class="message-avatar">
+            ${avatar}
+        </div>
+        <div class="message-content">
+            <div class="message-text">${formatMessageText(text)}</div>
+            <div class="message-time">${time}</div>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Add to history
+    chatHistory.push({ text, sender, time });
+}
+
+function formatMessageText(text) {
+    // Convert markdown-like formatting to HTML
+    return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>')
+        .replace(/• /g, '<li>')
+        .replace(/(\d+\. )/g, '<li>$1');
+}
+
+function showTypingIndicator() {
+    if (isTyping) return;
+    
+    isTyping = true;
+    const messagesContainer = document.getElementById('chatMessages');
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'message assistant';
+    typingDiv.id = 'typingIndicator';
+    
+    typingDiv.innerHTML = `
+        <div class="message-avatar">
+            <i class="fas fa-robot"></i>
+        </div>
+        <div class="message-content">
+            <div class="typing-indicator">
+                <span>Escribiendo</span>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(typingDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    isTyping = false;
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+}
+
+function clearChat() {
+    if (confirm('¿Estás seguro de que quieres limpiar la conversación?')) {
+        const messagesContainer = document.getElementById('chatMessages');
+        messagesContainer.innerHTML = `
+            <div class="message assistant">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">
+                        ¡Hola! Soy el asistente MCP de GoManage. ¿En qué puedo ayudarte hoy?
+                    </div>
+                    <div class="message-time">Ahora</div>
+                </div>
+            </div>
+        `;
+        chatHistory = [];
+    }
+}
+
+function exportChat() {
+    if (chatHistory.length === 0) {
+        alert('No hay conversación para exportar.');
+        return;
+    }
+    
+    const chatText = chatHistory.map(msg => 
+        `[${msg.time}] ${msg.sender === 'user' ? 'Usuario' : 'Asistente'}: ${msg.text}`
+    ).join('\n\n');
+    
+    const blob = new Blob([chatText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chat-gomanage-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function toggleDocumentPanel() {
+    const content = document.getElementById('documentPanelContent');
+    const button = document.querySelector('.panel-header button i');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        button.className = 'fas fa-chevron-down';
+    } else {
+        content.style.display = 'none';
+        button.className = 'fas fa-chevron-up';
+    }
+}
+
+function selectTemplate(templateId) {
+    selectedTemplate = templateId;
+    
+    // Update template selection visual feedback
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    event.currentTarget.classList.add('selected');
+    
+    // Show document form
+    document.getElementById('documentForm').style.display = 'block';
+    
+    // Set default title based on template
+    const titles = {
+        'customer-report': 'Reporte de Clientes',
+        'sales-report': 'Reporte de Ventas',
+        'invoice': 'Factura',
+        'delivery-note': 'Albarán de Entrega'
+    };
+    
+    document.getElementById('documentTitle').value = titles[templateId] || 'Documento';
+}
+
+function cancelDocumentGeneration() {
+    document.getElementById('documentForm').style.display = 'none';
+    selectedTemplate = null;
+    
+    // Remove selection
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+}
+
+function generateDocument() {
+    if (!selectedTemplate) {
+        alert('Por favor, selecciona una plantilla primero.');
+        return;
+    }
+    
+    const formData = {
+        template: selectedTemplate,
+        title: document.getElementById('documentTitle').value,
+        period: document.getElementById('documentPeriod').value,
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        format: document.getElementById('documentFormat').value,
+        includeCharts: document.getElementById('includeCharts').checked,
+        includeDetails: document.getElementById('includeDetails').checked,
+        includeSummary: document.getElementById('includeSummary').checked
+    };
+    
+    // Show loading state
+    const submitBtn = document.querySelector('#generateDocumentForm button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
+    submitBtn.disabled = true;
+    
+    // Simulate document generation
+    setTimeout(() => {
+        // Add to recent documents
+        addRecentDocument(formData);
+        
+        // Reset form
+        cancelDocumentGeneration();
+        document.getElementById('generateDocumentForm').reset();
+        
+        // Restore button
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        
+        // Show success message
+        addMessage(`✅ Documento "${formData.title}" generado exitosamente en formato ${formData.format.toUpperCase()}.`, 'assistant');
+        
+        alert(`Documento "${formData.title}" generado exitosamente.\n\nEn una implementación real, el archivo se descargaría automáticamente.`);
+        
+    }, 3000);
+}
+
+function addRecentDocument(docData) {
+    const documentsList = document.getElementById('recentDocumentsList');
+    const docItem = document.createElement('div');
+    docItem.className = 'document-item';
+    
+    const now = new Date();
+    const timeStr = now.toLocaleString('es-ES');
+    
+    docItem.innerHTML = `
+        <div class="document-info">
+            <div class="document-name">${docData.title}</div>
+            <div class="document-details">${docData.format.toUpperCase()} • ${timeStr}</div>
+        </div>
+        <div class="document-actions">
+            <button class="document-action" onclick="downloadDocument('${docData.title}')" title="Descargar">
+                <i class="fas fa-download"></i>
+            </button>
+            <button class="document-action" onclick="shareDocument('${docData.title}')" title="Compartir">
+                <i class="fas fa-share"></i>
+            </button>
+        </div>
+    `;
+    
+    // Insert at the beginning
+    documentsList.insertBefore(docItem, documentsList.firstChild);
+    
+    // Keep only last 5 documents
+    while (documentsList.children.length > 5) {
+        documentsList.removeChild(documentsList.lastChild);
+    }
+}
+
+function loadRecentDocuments() {
+    const documentsList = document.getElementById('recentDocumentsList');
+    
+    // Sample recent documents
+    const sampleDocs = [
+        { title: 'Reporte de Clientes - Noviembre', format: 'PDF', date: '2024-11-15 10:30' },
+        { title: 'Análisis de Ventas Q3', format: 'Excel', date: '2024-11-14 16:45' },
+        { title: 'Factura #001234', format: 'PDF', date: '2024-11-14 09:15' }
+    ];
+    
+    documentsList.innerHTML = '';
+    
+    sampleDocs.forEach(doc => {
+        const docItem = document.createElement('div');
+        docItem.className = 'document-item';
+        
+        docItem.innerHTML = `
+            <div class="document-info">
+                <div class="document-name">${doc.title}</div>
+                <div class="document-details">${doc.format} • ${doc.date}</div>
+            </div>
+            <div class="document-actions">
+                <button class="document-action" onclick="downloadDocument('${doc.title}')" title="Descargar">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="document-action" onclick="shareDocument('${doc.title}')" title="Compartir">
+                    <i class="fas fa-share"></i>
+                </button>
+            </div>
+        `;
+        
+        documentsList.appendChild(docItem);
+    });
+}
+
+function downloadDocument(title) {
+    alert(`Descargando documento: ${title}\n\nEn una implementación real, el archivo se descargaría automáticamente.`);
+}
+
+function shareDocument(title) {
+    alert(`Compartiendo documento: ${title}\n\nEn una implementación real, se abriría un diálogo para compartir el documento.`);
+}
+
+// Add CSS for selected template
+const style = document.createElement('style');
+style.textContent = `
+    .template-card.selected {
+        background: var(--primary-default) !important;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-medium);
+    }
+    
+    .template-card.selected .template-info h5,
+    .template-card.selected .template-info p {
+        color: white;
+    }
+`;
+document.head.appendChild(style);
+
+// Initialize chat MCP when the section becomes active
+document.addEventListener('DOMContentLoaded', function() {
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.target.classList.contains('active') && 
+                mutation.target.id === 'chat-mcp') {
+                initializeChatMCP();
+            }
+        });
+    });
+    
+    const chatMcpSection = document.getElementById('chat-mcp');
+    if (chatMcpSection) {
+        observer.observe(chatMcpSection, { attributes: true, attributeFilter: ['class'] });
+    }
+});
+</script>
+

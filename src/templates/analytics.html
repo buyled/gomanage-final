@@ -1,0 +1,856 @@
+<!-- Analytics Section -->
+<div class="content-section" id="analytics">
+    <div class="header">
+        <h1><i class="fas fa-chart-bar"></i> Análisis y Reportes</h1>
+        <p>Dashboard avanzado con métricas y análisis en tiempo real</p>
+    </div>
+    
+    <div class="analytics-container">
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="totalCustomers">-</div>
+                    <div class="kpi-label">Total Clientes</div>
+                    <div class="kpi-change positive" id="customersChange">+5.2%</div>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="totalOrders">-</div>
+                    <div class="kpi-label">Pedidos Totales</div>
+                    <div class="kpi-change positive" id="ordersChange">+12.8%</div>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-icon">
+                    <i class="fas fa-euro-sign"></i>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="totalRevenue">-</div>
+                    <div class="kpi-label">Facturación Total</div>
+                    <div class="kpi-change positive" id="revenueChange">+8.4%</div>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="kpi-content">
+                    <div class="kpi-value" id="avgOrderValue">-</div>
+                    <div class="kpi-label">Ticket Medio</div>
+                    <div class="kpi-change negative" id="avgChange">-2.1%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- Sales Trend Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-line"></i> Tendencia de Ventas</h3>
+                    <div class="chart-controls">
+                        <select id="salesPeriod">
+                            <option value="7">Últimos 7 días</option>
+                            <option value="30" selected>Últimos 30 días</option>
+                            <option value="90">Últimos 90 días</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salesTrendChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Customer Types Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-pie-chart"></i> Tipos de Cliente</h3>
+                    <div class="chart-legend" id="customerTypesLegend"></div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="customerTypesChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Geographic Distribution -->
+            <div class="chart-card full-width">
+                <div class="chart-header">
+                    <h3><i class="fas fa-map-marked-alt"></i> Distribución Geográfica</h3>
+                    <div class="chart-controls">
+                        <button class="btn-chart active" data-view="provinces">Por Provincias</button>
+                        <button class="btn-chart" data-view="regions">Por Regiones</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="geographicChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Top Customers -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-crown"></i> Top Clientes</h3>
+                    <div class="chart-controls">
+                        <select id="topCustomersMetric">
+                            <option value="orders">Por Pedidos</option>
+                            <option value="revenue" selected>Por Facturación</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="top-customers-list" id="topCustomersList">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+            
+            <!-- Payment Methods -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-credit-card"></i> Métodos de Pago</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="paymentMethodsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reports Section -->
+        <div class="reports-section">
+            <div class="reports-header">
+                <h2><i class="fas fa-file-alt"></i> Reportes Personalizados</h2>
+                <button class="btn-primary" onclick="generateReport()">
+                    <i class="fas fa-download"></i> Generar Reporte
+                </button>
+            </div>
+            
+            <div class="reports-grid">
+                <div class="report-card">
+                    <div class="report-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="report-content">
+                        <h4>Reporte de Clientes</h4>
+                        <p>Análisis completo de la base de clientes</p>
+                        <div class="report-stats">
+                            <span>📊 <span id="reportCustomers">-</span> clientes</span>
+                            <span>📍 <span id="reportProvinces">-</span> provincias</span>
+                        </div>
+                    </div>
+                    <button class="btn-outline" onclick="exportCustomersReport()">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
+                </div>
+                
+                <div class="report-card">
+                    <div class="report-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="report-content">
+                        <h4>Reporte de Ventas</h4>
+                        <p>Análisis de tendencias y performance</p>
+                        <div class="report-stats">
+                            <span>💰 <span id="reportRevenue">-</span>€</span>
+                            <span>📈 <span id="reportGrowth">-</span>% crecimiento</span>
+                        </div>
+                    </div>
+                    <button class="btn-outline" onclick="exportSalesReport()">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </button>
+                </div>
+                
+                <div class="report-card">
+                    <div class="report-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <div class="report-content">
+                        <h4>Reporte Geográfico</h4>
+                        <p>Distribución por regiones y provincias</p>
+                        <div class="report-stats">
+                            <span>🗺️ <span id="reportRegions">-</span> regiones</span>
+                            <span>🏆 <span id="reportTopProvince">-</span> top</span>
+                        </div>
+                    </div>
+                    <button class="btn-outline" onclick="exportGeographicReport()">
+                        <i class="fas fa-file-csv"></i> CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Analytics Styles */
+.analytics-container {
+    padding: var(--spacing-xl);
+    background: var(--neutral-200);
+    min-height: calc(100vh - 200px);
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.kpi-card {
+    background: var(--neutral-100);
+    border-radius: var(--radius-large);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-medium);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hard);
+}
+
+.kpi-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+}
+
+.kpi-content {
+    flex: 1;
+}
+
+.kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.kpi-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: var(--spacing-xs) 0;
+}
+
+.kpi-change {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+}
+
+.kpi-change.positive {
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--status-success);
+}
+
+.kpi-change.negative {
+    background: rgba(244, 67, 54, 0.1);
+    color: var(--status-error);
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.chart-card {
+    background: var(--neutral-100);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+}
+
+.chart-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.chart-header {
+    padding: var(--spacing-lg);
+    border-bottom: 2px solid var(--neutral-300);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chart-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.chart-controls select,
+.chart-controls button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--neutral-400);
+    border-radius: var(--radius-small);
+    background: var(--neutral-100);
+    color: var(--text-primary);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-chart {
+    background: transparent;
+    border: 1px solid var(--neutral-400);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-small);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-chart.active {
+    background: var(--primary-default);
+    color: white;
+    border-color: var(--primary-default);
+}
+
+.chart-container {
+    padding: var(--spacing-lg);
+    height: 300px;
+    position: relative;
+}
+
+.chart-legend {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 12px;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.top-customers-list {
+    padding: var(--spacing-lg);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.customer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--neutral-300);
+}
+
+.customer-item:last-child {
+    border-bottom: none;
+}
+
+.customer-info {
+    flex: 1;
+}
+
+.customer-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.customer-details {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.customer-value {
+    font-weight: 600;
+    color: var(--primary-default);
+}
+
+.reports-section {
+    background: var(--neutral-100);
+    border-radius: var(--radius-large);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-medium);
+}
+
+.reports-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--neutral-300);
+}
+
+.reports-header h2 {
+    margin: 0;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.report-card {
+    background: var(--neutral-200);
+    border-radius: var(--radius-medium);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    transition: all 0.3s ease;
+}
+
+.report-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.report-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-medium);
+    background: linear-gradient(135deg, var(--secondary-default), var(--secondary-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.report-content {
+    flex: 1;
+}
+
+.report-content h4 {
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--text-primary);
+}
+
+.report-content p {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.report-stats {
+    display: flex;
+    gap: var(--spacing-md);
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .chart-header {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: flex-start;
+    }
+    
+    .reports-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: flex-start;
+    }
+    
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .report-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Loading animation for charts */
+.chart-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    color: var(--text-secondary);
+}
+
+.chart-loading i {
+    animation: spin 1s linear infinite;
+    margin-right: var(--spacing-sm);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Analytics JavaScript
+let salesChart, customerTypesChart, geographicChart, paymentMethodsChart;
+
+// Initialize analytics when section is loaded
+function initializeAnalytics() {
+    loadAnalyticsData();
+    setupChartControls();
+}
+
+function loadAnalyticsData() {
+    // Show loading state
+    showLoadingState();
+    
+    // Fetch analytics data from backend
+    fetch('/api/analytics/dashboard')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateKPIs(data.data);
+                createCharts(data.data);
+                updateReports(data.data);
+            } else {
+                console.error('Error loading analytics:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function showLoadingState() {
+    document.getElementById('totalCustomers').textContent = 'Cargando...';
+    document.getElementById('totalOrders').textContent = 'Cargando...';
+    document.getElementById('totalRevenue').textContent = 'Cargando...';
+    document.getElementById('avgOrderValue').textContent = 'Cargando...';
+}
+
+function updateKPIs(data) {
+    // Update KPI values
+    document.getElementById('totalCustomers').textContent = data.customers.total.toLocaleString();
+    document.getElementById('totalOrders').textContent = data.sales.total_orders.toLocaleString();
+    document.getElementById('totalRevenue').textContent = data.sales.total_amount.toLocaleString() + '€';
+    
+    const avgOrderValue = data.sales.total_orders > 0 ? 
+        (data.sales.total_amount / data.sales.total_orders) : 0;
+    document.getElementById('avgOrderValue').textContent = avgOrderValue.toFixed(2) + '€';
+}
+
+function createCharts(data) {
+    createSalesTrendChart(data);
+    createCustomerTypesChart(data);
+    createGeographicChart(data);
+    createPaymentMethodsChart(data);
+    updateTopCustomers(data);
+}
+
+function createSalesTrendChart(data) {
+    const ctx = document.getElementById('salesTrendChart').getContext('2d');
+    
+    // Generate sample data for the last 30 days
+    const labels = [];
+    const salesData = [];
+    const today = new Date();
+    
+    for (let i = 29; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        labels.push(date.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }));
+        salesData.push(Math.random() * 5000 + 1000); // Sample data
+    }
+    
+    salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Ventas (€)',
+                data: salesData,
+                borderColor: '#7B61FF',
+                backgroundColor: 'rgba(123, 97, 255, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString() + '€';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createCustomerTypesChart(data) {
+    const ctx = document.getElementById('customerTypesChart').getContext('2d');
+    
+    const customerTypes = data.customers.by_type || {};
+    const labels = Object.keys(customerTypes).map(key => {
+        switch(key) {
+            case '1': return 'VIP';
+            case '2': return 'Almacén';
+            case '3': return 'Profesional';
+            default: return 'Otros';
+        }
+    });
+    const values = Object.values(customerTypes);
+    const colors = ['#7B61FF', '#4CAF50', '#FFC107', '#FF5722'];
+    
+    customerTypesChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: colors,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    
+    // Create custom legend
+    createCustomLegend('customerTypesLegend', labels, colors, values);
+}
+
+function createGeographicChart(data) {
+    const ctx = document.getElementById('geographicChart').getContext('2d');
+    
+    const provinces = data.customers.by_province || {};
+    const labels = Object.keys(provinces).slice(0, 10); // Top 10
+    const values = Object.values(provinces).slice(0, 10);
+    
+    geographicChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Clientes',
+                data: values,
+                backgroundColor: '#4CAF50',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function createPaymentMethodsChart(data) {
+    const ctx = document.getElementById('paymentMethodsChart').getContext('2d');
+    
+    // Sample payment methods data
+    const paymentMethods = {
+        'Transferencia': 45,
+        'Contado': 25,
+        'Tarjeta': 20,
+        'Otros': 10
+    };
+    
+    const labels = Object.keys(paymentMethods);
+    const values = Object.values(paymentMethods);
+    const colors = ['#7B61FF', '#4CAF50', '#FFC107', '#FF5722'];
+    
+    paymentMethodsChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: colors,
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+function createCustomLegend(containerId, labels, colors, values) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    
+    labels.forEach((label, index) => {
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.innerHTML = `
+            <div class="legend-color" style="background-color: ${colors[index]}"></div>
+            <span>${label} (${values[index]})</span>
+        `;
+        container.appendChild(item);
+    });
+}
+
+function updateTopCustomers(data) {
+    const container = document.getElementById('topCustomersList');
+    container.innerHTML = '';
+    
+    // Sample top customers data
+    const topCustomers = [
+        { name: 'ACME Distribuciones S.L.', city: 'Madrid', orders: 45, revenue: 12500 },
+        { name: 'Comercial López', city: 'Barcelona', orders: 38, revenue: 9800 },
+        { name: 'Suministros García', city: 'Valencia', orders: 32, revenue: 8900 },
+        { name: 'Distribuidora Norte', city: 'Bilbao', orders: 28, revenue: 7600 },
+        { name: 'Almacenes Sur', city: 'Sevilla', orders: 25, revenue: 6800 }
+    ];
+    
+    topCustomers.forEach((customer, index) => {
+        const item = document.createElement('div');
+        item.className = 'customer-item';
+        item.innerHTML = `
+            <div class="customer-info">
+                <div class="customer-name">${index + 1}. ${customer.name}</div>
+                <div class="customer-details">${customer.city} • ${customer.orders} pedidos</div>
+            </div>
+            <div class="customer-value">${customer.revenue.toLocaleString()}€</div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+function updateReports(data) {
+    document.getElementById('reportCustomers').textContent = data.customers.total.toLocaleString();
+    document.getElementById('reportProvinces').textContent = Object.keys(data.customers.by_province || {}).length;
+    document.getElementById('reportRevenue').textContent = data.sales.total_amount.toLocaleString();
+    document.getElementById('reportGrowth').textContent = '8.4';
+    document.getElementById('reportRegions').textContent = '17';
+    document.getElementById('reportTopProvince').textContent = 'Madrid';
+}
+
+function setupChartControls() {
+    // Sales period control
+    document.getElementById('salesPeriod').addEventListener('change', function() {
+        // Reload sales chart with new period
+        loadAnalyticsData();
+    });
+    
+    // Geographic view controls
+    document.querySelectorAll('.btn-chart').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.btn-chart').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            // Reload geographic chart with new view
+            loadAnalyticsData();
+        });
+    });
+    
+    // Top customers metric control
+    document.getElementById('topCustomersMetric').addEventListener('change', function() {
+        // Reload top customers with new metric
+        loadAnalyticsData();
+    });
+}
+
+// Report generation functions
+function generateReport() {
+    alert('Generando reporte completo...\nEsta funcionalidad estará disponible próximamente.');
+}
+
+function exportCustomersReport() {
+    alert('Exportando reporte de clientes a PDF...\nEsta funcionalidad estará disponible próximamente.');
+}
+
+function exportSalesReport() {
+    alert('Exportando reporte de ventas a Excel...\nEsta funcionalidad estará disponible próximamente.');
+}
+
+function exportGeographicReport() {
+    alert('Exportando reporte geográfico a CSV...\nEsta funcionalidad estará disponible próximamente.');
+}
+
+// Initialize analytics when the section becomes active
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if analytics section is active and initialize
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.target.classList.contains('active') && 
+                mutation.target.id === 'analytics') {
+                initializeAnalytics();
+            }
+        });
+    });
+    
+    const analyticsSection = document.getElementById('analytics');
+    if (analyticsSection) {
+        observer.observe(analyticsSection, { attributes: true, attributeFilter: ['class'] });
+    }
+});
+</script>
+
