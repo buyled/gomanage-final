@@ -1,15 +1,13 @@
-"""GoManage API Gateway (optimised)
-------------------------------------------------
-Single‑file Flask application to proxy and enrich GoManage data.
-• Env‑driven config (no credentials in code)
-• Session caching with auto‑refresh
-• Simple in‑memory cache for customers/products
-• Structured logging (rather than prints)
-• All routes unique; duplicates removed
-• Ready for production with Gunicorn (no __main__)
+"""GoManage API Gateway (optimizado)
+------------------------------------
+• Config vía variables de entorno
+• Autenticación y caché de sesión
+• Endpoints: auth, customers (GET/POST), analytics, chat
 """
+
 from __future__ import annotations
 
+import json
 import logging
 import os
 from datetime import datetime, timedelta
@@ -21,52 +19,60 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 
-# ---------------------------------------------------------------------------
-# CONFIG --------------------------------------------------------------------
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------- #
+# CONFIGURACIÓN                                                               #
+# --------------------------------------------------------------------------- #
 load_dotenv()
 
 class Config:
-    """Centralised settings (taken from env vars, with sane defaults)."""
-
-    BASE_URL: str = os.getenv("GOMANAGE_BASE_URL", "http://localhost:8181")
-    USERNAME: str = os.getenv("GOMANAGE_USERNAME", "user")
-    PASSWORD: str = os.getenv("GOMANAGE_PASSWORD", "pass")
+    BASE_URL: str = os.getenv("GOMANAGE_BASE_URL", "http://buyled.clonico.es:8181")
+    USERNAME: str = os.getenv("GOMANAGE_USERNAME")
+    PASSWORD: str = os.getenv("GOMANAGE_PASSWORD")
     AUTH_TOKEN: str = os.getenv("GOMANAGE_AUTH_TOKEN", "")
+    CACHE_TTL = 7200  # s
 
-    # Request time‑outs
-    CONNECT_TIMEOUT = float(os.getenv("CONNECT_TIMEOUT", "10"))
-    READ_TIMEOUT = float(os.getenv("READ_TIMEOUT", "25"))
-
-    # Caching
-    CACHE_TTL = int(os.getenv("CACHE_TTL", "7200"))  # 2 h
-
-
-# ---------------------------------------------------------------------------
-# APP SET‑UP -----------------------------------------------------------------
-# ---------------------------------------------------------------------------
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-# Logger configured once
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
 )
 logger = logging.getLogger("gomanage-api")
 
-
-# ---------------------------------------------------------------------------
-# SESSION / CACHE ------------------------------------------------------------
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------- #
+# SESIÓN Y CACHÉ                                                              #
+# --------------------------------------------------------------------------- #
 _session_id: Optional[str] = None
 _session_expires: Optional[datetime] = None
 _customers_cache: List[Dict[str, Any]] = []
 _products_cache: List[Dict[str, Any]] = []
 
 
+def _is_session_valid() -> bool:
+    return _session_id and _session_expires and _session_expires > datetime.utcnow()
+
+
+def _authenticate() -> None:
+    """Login form‑based y guarda JSESSIONID."""
+    global _session_id, _session_expires
+    url = f"{Config.BASE_URL}/gomanage/static/auth/j_spring_security_check"
+    data = {"j_username": Config.USERNAME, "j_password": Config.PASSWORD}
+    resp = requests.post(url, data=data, timeout=15, allow_redirects=False)
+    resp.raise_for_status()
+    cookie = resp.headers.get("Set-Cookie", "")
+    for part in cookie.split(";"):
+        if part.strip().startswith("JSESSIONID"):
+            _session_id = part.split("=", 1)[1]
+            _session_expires = datetime.utcnow() + timedelta(seconds=Config.CACHE_TTL)
+            logger.info("Sesión GoManage OK (expira %s)", _session_expires.isoformat())
+            break
+    else:
+        raise RuntimeError("JSESSIONID no encontrado")
+
+
 def session_required(func):
-    """Decorator: ensures we have a valid JSESSIONID before calling func."""
+    """Deco que asegura sesión viva antes de llamar a la función."""
 
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -77,118 +83,60 @@ def session_required(func):
     return wrapper
 
 
-def _is_session_valid() -> bool:
-    return _session_id is not None and _session_expires and _session_expires > datetime.utcnow()
-
-
-def _authenticate() -> None:
-    """Perform form‑based login to GoManage and store JSESSIONID."""
-    global _session_id, _session_expires
-
-    auth_url = f"{Config.BASE_URL}/gomanage/static/auth/j_spring_security_check"
-    data = {"j_username": Config.USERNAME, "j_password": Config.PASSWORD}
-
-    logger.info("Authenticating to GoManage as %s", Config.USERNAME)
-    try:
-        resp = requests.post(auth_url, data=data, timeout=(Config.CONNECT_TIMEOUT, Config.READ_TIMEOUT), allow_redirects=False)
-        resp.raise_for_status()
-    except requests.RequestException as exc:
-        logger.error("Could not authenticate: %s", exc)
-        raise
-
-    # Parse cookie header
-    cookie_header = resp.headers.get("Set-Cookie", "")
-    for part in cookie_header.split(";"):
-        if part.strip().startswith("JSESSIONID"):
-            _session_id = part.split("=", 1)[1]
-            _session_expires = datetime.utcnow() + timedelta(seconds=Config.CACHE_TTL)
-            logger.info("Session established, expires at %s", _session_expires.isoformat(timespec="seconds"))
-            break
-    else:
-        raise RuntimeError("JSESSIONID cookie not found in auth response")
-
-
 @session_required
-def _request(method: str, endpoint: str, *, params: dict | None = None, json: dict | None = None) -> requests.Response:
-    """Wrapper around requests with session & auth headers."""
+def _request(method: str, endpoint: str, **kwargs) -> requests.Response:
+    """Petición con headers y retry si 401."""
     url = f"{Config.BASE_URL}{endpoint}"
     headers = {
         "Cookie": f"JSESSIONID={_session_id}",
         "Authorization": f"oecp {Config.AUTH_TOKEN}",
         "Accept": "application/json",
     }
-    if json is not None:
+    if kwargs.get("json"):
         headers["Content-Type"] = "application/json"
 
-    request_kwargs = dict(headers=headers, params=params, json=json, timeout=(Config.CONNECT_TIMEOUT, Config.READ_TIMEOUT))
-
-    response = requests.request(method.upper(), url, **request_kwargs)
-    if response.status_code == 401:
-        # Session expired → re‑authenticate once and retry
-        logger.info("401 received, refreshing session and retrying …")
+    resp = requests.request(method, url, headers=headers, timeout=25, **kwargs)
+    if resp.status_code == 401:
         _authenticate()
         headers["Cookie"] = f"JSESSIONID={_session_id}"
-        response = requests.request(method.upper(), url, **request_kwargs)
-    response.raise_for_status()
-    return response
+        resp = requests.request(method, url, headers=headers, timeout=25, **kwargs)
+    resp.raise_for_status()
+    return resp
 
 
-# ---------------------------------------------------------------------------
-# DATA LOADING / CACHING -----------------------------------------------------
-# ---------------------------------------------------------------------------
-
-def _load_paginated(endpoint: str, page_key: str) -> List[dict]:
-    """Generic helper to fetch *all* pages from a GoManage list endpoint."""
-    page_size = 500
-    page = 1
-    output: List[dict] = []
-
+def _load_paginated(endpoint: str) -> List[dict]:
+    page, size, out = 1, 500, []
     while True:
-        params = {"page": page, "size": page_size}
-        resp = _request("GET", endpoint, params=params)
-        data = resp.json()
-        entries = data.get("page_entries", [])
-        output.extend(entries)
-        if len(output) >= data.get("total_entries", 0):
+        data = _request("GET", endpoint, params={"page": page, "size": size}).json()
+        out.extend(data.get("page_entries", []))
+        if len(out) >= data.get("total_entries", 0):
             break
         page += 1
-    return output
+    return out
 
 
 def _ensure_customers_loaded():
     if not _customers_cache:
-        logger.info("Downloading customer catalogue …")
-        _customers_cache.extend(_load_paginated("/gomanage/web/data/apitmt-customers/List", "customers"))
-        logger.info("Loaded %d customers", len(_customers_cache))
+        _customers_cache.extend(_load_paginated("/gomanage/web/data/apitmt-customers/List"))
 
 
-def _ensure_products_loaded():
-    if not _products_cache:
-        logger.info("Downloading product catalogue …")
-        _products_cache.extend(_load_paginated("/gomanage/web/data/apitmt-products/List", "products"))
-        logger.info("Loaded %d products", len(_products_cache))
-
-
-# ---------------------------------------------------------------------------
-# ROUTES ---------------------------------------------------------------------
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------- #
+# RUTAS                                                                       #
+# --------------------------------------------------------------------------- #
 @app.route("/")
 def index():
     return render_template("index_improved.html")
 
 
-# -- Auth --------------------------------------------------------------------
 @app.route("/api/auth", methods=["POST"])
 @session_required
 def auth():
     _ensure_customers_loaded()
-    _ensure_products_loaded()
     return jsonify(
         {
             "status": "success",
             "session_id": _session_id[:8] + "…" if _session_id else None,
             "customers_loaded": len(_customers_cache),
-            "products_loaded": len(_products_cache),
         }
     )
 
@@ -222,6 +170,39 @@ def get_customers():
     )
 
 
+@app.route("/api/customers", methods=["POST"])
+@session_required
+def create_customer():
+    """Crear cliente nuevo en GoManage."""
+    payload = request.get_json(silent=True) or {}
+
+    required = {"business_name", "name", "vat_number"}
+    missing = required - payload.keys()
+    if missing:
+        return jsonify(
+            {"error": f"Campos obligatorios faltantes: {', '.join(missing)}"}
+        ), 400
+
+    payload.setdefault("country_id", "ES")
+    payload.setdefault("currency_id", "eur")
+    payload.setdefault("language_id", "cas")
+
+    try:
+        resp = _request(
+            "POST",
+            "/gomanage/web/data/apitmt-customers/",
+            json=payload,
+        )
+    except requests.HTTPError as exc:
+        logger.error("Create customer failed: %s", exc)
+        return jsonify(
+            {"error": "GoManage respondió con error", "detail": str(exc)}
+        ), 502
+
+    _customers_cache.clear()  # fuerza recarga en próximo GET
+    return jsonify({"status": "success", "customer": resp.json()})
+
+
 # -- Analytics ---------------------------------------------------------------
 @app.route("/api/analytics/dashboard", methods=["GET"])
 @session_required
@@ -231,15 +212,16 @@ def analytics_dashboard():
     customer_types: Dict[str, int] = {}
     provinces: Dict[str, int] = {}
     for cust in _customers_cache:
-        customer_types[cust.get("tip_cli", "otros")] = customer_types.get(cust.get("tip_cli", "otros"), 0) + 1
-        provinces[cust.get("province_name", "Sin provincia")] = provinces.get(cust.get("province_name", "Sin provincia"), 0) + 1
+        customer_types[cust.get("tip_cli", "otros")] = customer_types.get(
+            cust.get("tip_cli", "otros"), 0
+        ) + 1
+        provinces[cust.get("province_name", "Sin provincia")] = provinces.get(
+            cust.get("province_name", "Sin provincia"), 0
+        ) + 1
 
-    top_provinces = dict(sorted(provinces.items(), key=lambda kv: kv[1], reverse=True)[:10])
-
-    # lightweight: request just first page of invoices for total
-    sales_resp = _request("GET", "/gomanage/web/data/apitmt-sales-invoices/List", params={"size": 100})
-    invoices = sales_resp.json().get("page_entries", [])
-    total_sales = sum(float(inv.get("total", 0)) for inv in invoices)
+    top_provinces = dict(
+        sorted(provinces.items(), key=lambda kv: kv[1], reverse=True)[:10]
+    )
 
     return jsonify(
         {
@@ -247,37 +229,25 @@ def analytics_dashboard():
                 "total": len(_customers_cache),
                 "by_type": customer_types,
                 "top_provinces": top_provinces,
-            },
-            "sales": {
-                "sample": len(invoices),
-                "total_sample_amount": total_sales,
-            },
+            }
         }
     )
 
 
-# -- Chat MCP (simple rules) --------------------------------------------------
+# -- Chat MCP ----------------------------------------------------------------
 @app.route("/api/chat/mcp", methods=["POST"])
 @session_required
 def chat_mcp():
-    data = request.get_json(silent=True) or {}
-    question = data.get("question", "").strip()
-    if not question:
+    q = (request.get_json(silent=True) or {}).get("question", "").lower()
+    if not q:
         return jsonify({"error": "Pregunta vacía"}), 400
-    return jsonify({"response": _mcp_answer(question), "timestamp": datetime.utcnow().isoformat()})
+    if "cliente" in q:
+        return jsonify(
+            {"response": f"Tenemos {len(_customers_cache)} clientes en la base."}
+        )
+    return jsonify({"response": "No entiendo la pregunta."})
 
 
-def _mcp_answer(text: str) -> str:
-    t = text.lower()
-    if "cliente" in t:
-        return f"Tenemos {len(_customers_cache)} clientes en la base de datos."
-    if "ventas" in t or "pedido" in t:
-        return "Consulta /api/analytics/dashboard para ver estadísticas de ventas."
-    return "No entiendo la pregunta, prueba con 'clientes' o 'ventas'."
-
-
-# ---------------------------------------------------------------------------
-# Production entry‑point (Gunicorn will look for `app`) -----------------------
-# ---------------------------------------------------------------------------
-# No `if __name__ == '__main__'`: run locally with `flask run` or
-# `python -m flask run --app gomanage_api.py
+# --------------------------------------------------------------------------- #
+# Fin: Gunicorn importará `app`                                               #
+# --------------------------------------------------------------------------- #
