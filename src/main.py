@@ -166,6 +166,7 @@ def create_customer():
     payload.setdefault("country_id", "ES")
     payload.setdefault("currency_id", "eur")
     payload.setdefault("language_id", "cas")
+    payload.setdefault("periodicity_id", "1")  # << añadido por defecto
 
     try:
         resp = _request("POST", "/gomanage/web/data/apitmt-customers/", json=payload)
