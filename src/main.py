@@ -194,10 +194,10 @@ def create_customer():
             json=payload,
         )
     except requests.HTTPError as exc:
-        logger.error("Create customer failed: %s", exc)
-        return jsonify(
-            {"error": "GoManage respondió con error", "detail": str(exc)}
-        ), 502
+    detail = exc.response.text if exc.response is not None else str(exc)
+    logger.error("GoManage 422 -> %s", detail[:400])      # muestra en logs
+    return jsonify({"status": "error", "detail": detail}), exc.response.status_code
+
 
     _customers_cache.clear()  # fuerza recarga en próximo GET
     return jsonify({"status": "success", "customer": resp.json()})
