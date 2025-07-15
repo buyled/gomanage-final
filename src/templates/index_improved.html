@@ -794,28 +794,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="paymentMethod">Forma de Pago</label>
-                                    <select id="paymentMethod" name="payment_method_id">
-                                        <option value="">Seleccionar forma de pago</option>
-                                        <option value="1">Contado</option>
-                                        <option value="2">Transferencia</option>
-                                        <option value="3">Tarjeta</option>
-                                        <option value="4">Financiado</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="discountType">Tipo de Descuento</label>
-                                    <select id="discountType" name="discount_type_id">
-                                        <option value="">Sin descuento</option>
-                                        <option value="1">VIP</option>
-                                        <option value="2">Almacén</option>
-                                        <option value="3">Profesional</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Step 3: Confirmation -->
@@ -989,8 +967,6 @@
                 { label: 'Código Postal', value: formData.get('postal_code') || '-' },
                 { label: 'Ciudad', value: formData.get('city') || '-' },
                 { label: 'Provincia', value: getProvinceText(formData.get('province_id')) || '-' },
-                { label: 'Forma de Pago', value: getPaymentMethodText(formData.get('payment_method_id')) || '-' },
-                { label: 'Tipo de Descuento', value: getDiscountTypeText(formData.get('discount_type_id')) || '-' }
                 { label: 'Forma de Pago', value: getPaymentMethodText(formData.get('payment_method_id')) || '-' },
                 { label: 'Tipo de Descuento', value: getDiscountTypeText(formData.get('discount_type_id')) || '-' }
             ];
