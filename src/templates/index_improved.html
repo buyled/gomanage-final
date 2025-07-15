@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoManage - Sistema de Gestión Empresarial</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* CSS Variables from Design System */
+        /* Design System Variables */
         :root {
             /* Colors */
             --primary-default: #7B61FF;
@@ -82,11 +81,8 @@
 
         body {
             font-family: var(--font-family);
-            background: var(--neutral-200);
+            background-color: var(--neutral-200);
             color: var(--text-primary);
-            min-height: 100vh;
-            font-size: var(--font-size-body-medium);
-            font-weight: var(--font-weight-normal);
             line-height: 1.5;
         }
 
@@ -95,52 +91,66 @@
             min-height: 100vh;
         }
 
+        /* Sidebar */
         .sidebar {
             width: 280px;
             background: var(--neutral-100);
             padding: var(--spacing-xl);
             box-shadow: var(--shadow-medium);
-            color: var(--text-primary);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
         }
 
         .logo {
-            font-size: var(--font-size-h2);
-            font-weight: var(--font-weight-semibold);
-            margin-bottom: var(--spacing-xl);
-            color: var(--primary-default);
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--neutral-300);
+        }
+
+        .logo-icon {
+            font-size: var(--font-size-h2);
+        }
+
+        .logo h2 {
+            font-size: var(--font-size-h2);
+            font-weight: var(--font-weight-semibold);
+            color: var(--primary-default);
         }
 
         .nav-section {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
         }
 
-        .nav-section h3 {
+        .nav-title {
             font-size: var(--font-size-caption);
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-sm);
-            text-transform: uppercase;
-            letter-spacing: 1px;
             font-weight: var(--font-weight-medium);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-md);
         }
 
         .nav-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             padding: var(--spacing-xs) var(--spacing-md);
-            margin: var(--spacing-xs) 0;
+            margin-bottom: var(--spacing-xs);
             border-radius: var(--radius-pill);
             cursor: pointer;
             transition: all 0.3s ease;
             color: var(--text-secondary);
             font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-body-medium);
         }
 
         .nav-item:hover {
             background: var(--neutral-300);
+            color: var(--text-primary);
         }
 
         .nav-item.active {
@@ -151,28 +161,34 @@
         .badge {
             background: var(--primary-default);
             color: var(--text-on-primary);
-            padding: var(--spacing-xxs) var(--spacing-xs);
             border-radius: var(--radius-pill);
+            padding: var(--spacing-xxs) var(--spacing-xs);
             font-size: var(--font-size-caption);
             font-weight: var(--font-weight-medium);
+            min-width: 20px;
+            text-align: center;
         }
 
+        /* Main Content */
         .main-content {
             flex: 1;
+            margin-left: 280px;
             padding: var(--spacing-xl);
             background: var(--neutral-200);
         }
 
         .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
+            background: var(--neutral-100);
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow-medium);
+            padding: var(--spacing-xl);
+            min-height: calc(100vh - 64px);
         }
 
         .header {
             margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--neutral-300);
         }
 
         .header h1 {
@@ -180,463 +196,74 @@
             font-weight: var(--font-weight-semibold);
             color: var(--text-primary);
             margin-bottom: var(--spacing-sm);
-            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
         }
 
         .header p {
-            color: var(--text-secondary);
             font-size: var(--font-size-body-large);
-            line-height: 1.5;
-        }
-
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .card {
-            background: var(--neutral-100);
-            padding: var(--spacing-lg);
-            border-radius: var(--radius-large);
-            box-shadow: var(--shadow-medium);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hard);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .card-title {
-            font-size: var(--font-size-body-medium);
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: var(--font-weight-medium);
-        }
-
-        .card-value {
-            font-size: var(--font-size-h1);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-            line-height: 1.2;
-        }
-
-        .card-change {
-            font-size: var(--font-size-body-small);
-            padding: var(--spacing-xxs) var(--spacing-xs);
-            border-radius: var(--radius-pill);
-            font-weight: var(--font-weight-medium);
-        }
-
-        .card-change.positive { 
-            background: rgba(76, 175, 80, 0.1); 
-            color: var(--status-success); 
-        }
-        .card-change.negative { 
-            background: rgba(244, 67, 54, 0.1); 
-            color: var(--status-error); 
-        }
-
-        .connection-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: var(--spacing-xs) var(--spacing-md);
-            border-radius: var(--radius-pill);
-            font-size: var(--font-size-body-small);
-            font-weight: var(--font-weight-medium);
-            z-index: 1000;
-        }
-
-        .connection-status.connected { 
-            background: rgba(76, 175, 80, 0.1); 
-            color: var(--status-success); 
-        }
-        .connection-status.disconnected { 
-            background: rgba(244, 67, 54, 0.1); 
-            color: var(--status-error); 
-        }
-
-        .form-container {
-            background: var(--neutral-100);
-            padding: var(--spacing-xl);
-            border-radius: var(--radius-large);
-            box-shadow: var(--shadow-medium);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-lg);
-        }
-
-        .form-group {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: var(--spacing-xs);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-            font-size: var(--font-size-body-medium);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--neutral-400);
-            border-radius: var(--radius-medium);
-            font-size: var(--font-size-body-medium);
-            background: var(--neutral-200);
-            color: var(--text-primary);
-            font-family: var(--font-family);
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-default);
-            box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.1);
-        }
-        
-        .form-group input::placeholder,
-        .form-group select::placeholder,
-        .form-group textarea::placeholder {
             color: var(--text-secondary);
         }
 
-        .btn-primary {
-            background: var(--primary-default);
-            color: var(--text-on-primary);
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--radius-medium);
-            cursor: pointer;
-            font-size: var(--font-size-button);
-            font-weight: var(--font-weight-medium);
-            font-family: var(--font-family);
-            transition: all 0.3s ease;
-            line-height: 1;
+        /* Customer Form */
+        .customer-form-container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-secondary {
-            background: var(--neutral-300);
-            color: var(--text-primary);
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--radius-medium);
-            cursor: pointer;
-            font-size: var(--font-size-button);
-            font-weight: var(--font-weight-medium);
-            font-family: var(--font-family);
-            transition: all 0.3s ease;
-            line-height: 1;
-        }
-
-        .btn-secondary:hover {
-            background: var(--neutral-400);
-        }
-        
-        .btn-outline {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--neutral-400);
-            padding: 10px 20px;
-            border-radius: var(--radius-medium);
-            cursor: pointer;
-            font-size: var(--font-size-button);
-            font-weight: var(--font-weight-medium);
-            font-family: var(--font-family);
-            transition: all 0.3s ease;
-            line-height: 1;
-        }
-        
-        .btn-outline:hover {
-            background: var(--neutral-300);
-            color: var(--text-primary);
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--neutral-100);
-            border-radius: var(--radius-large);
-            overflow: hidden;
-            box-shadow: var(--shadow-medium);
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: var(--spacing-md);
-            text-align: left;
-            border-bottom: 1px solid var(--neutral-300);
-        }
-
-        .data-table th {
-            background: var(--primary-default);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-on-primary);
-            font-size: var(--font-size-body-medium);
-        }
-
-        .data-table tr:hover {
-            background: var(--neutral-200);
-        }
-
-        .search-container {
-            margin-bottom: var(--spacing-lg);
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--neutral-400);
-            border-radius: var(--radius-medium);
-            font-size: var(--font-size-body-medium);
-            background: var(--neutral-200);
-            color: var(--text-primary);
-            font-family: var(--font-family);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary-default);
-            box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.1);
-        }
-        
-        .search-input::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--neutral-100);
-            border: 1px solid var(--neutral-400);
-            border-radius: var(--radius-medium);
-            box-shadow: var(--shadow-medium);
-            z-index: 1000;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .dropdown-item {
-            padding: var(--spacing-sm) var(--spacing-md);
-            cursor: pointer;
-            transition: background 0.3s ease;
-            border-bottom: 1px solid var(--neutral-300);
-        }
-
-        .dropdown-item:hover {
-            background: var(--neutral-200);
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .loading {
-            color: var(--text-secondary);
-            text-align: center;
-            padding: var(--spacing-lg);
-            font-size: var(--font-size-body-medium);
-        }
-
-        .error {
-            color: var(--status-error);
-            text-align: center;
-            padding: var(--spacing-lg);
-            background: rgba(244, 67, 54, 0.1);
-            border-radius: var(--radius-medium);
-            margin: var(--spacing-lg) 0;
-            font-size: var(--font-size-body-medium);
-        }
-
-        .success {
-            color: var(--status-success);
-            text-align: center;
-            padding: var(--spacing-lg);
-            background: rgba(76, 175, 80, 0.1);
-            border-radius: var(--radius-medium);
-            margin: var(--spacing-lg) 0;
-            font-size: var(--font-size-body-medium);
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-lg);
-        }
-
-        .pagination button {
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border: 1px solid var(--neutral-400);
-            background: var(--neutral-100);
-            color: var(--text-primary);
-            cursor: pointer;
-            border-radius: var(--radius-small);
-            transition: all 0.3s ease;
-            font-family: var(--font-family);
-            font-size: var(--font-size-body-small);
-        }
-
-        .pagination button:hover {
-            background: var(--neutral-200);
-        }
-
-        .pagination button.active {
-            background: var(--primary-default);
-            color: var(--text-on-primary);
-            border-color: var(--primary-default);
-        }
-
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .filters {
-            display: flex;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-            flex-wrap: wrap;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs);
-        }
-
-        .filter-group label {
-            font-size: var(--font-size-body-small);
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: var(--font-weight-medium);
-        }
-
-        .filter-group select {
-            padding: var(--spacing-xs) var(--spacing-sm);
-            border: 1px solid var(--neutral-400);
-            border-radius: var(--radius-small);
-            background: var(--neutral-100);
-            color: var(--text-primary);
-            font-size: var(--font-size-body-medium);
-            font-family: var(--font-family);
-        }
-
-        .status-badge {
-            padding: var(--spacing-xxs) var(--spacing-xs);
-            border-radius: var(--radius-pill);
-            font-size: var(--font-size-caption);
-            font-weight: var(--font-weight-medium);
-            text-transform: uppercase;
-        }
-
-        .status-badge.pending { 
-            background: rgba(255, 193, 7, 0.2); 
-            color: var(--status-warning); 
-        }
-        .status-badge.confirmed { 
-            background: rgba(33, 150, 243, 0.2); 
-            color: var(--status-info); 
-        }
-        .status-badge.delivered { 
-            background: rgba(76, 175, 80, 0.2); 
-            color: var(--status-success); 
-        }
-
-        /* Form Steps Styles */
         .form-steps {
             display: flex;
             justify-content: center;
             margin-bottom: var(--spacing-xl);
-            background: var(--neutral-100);
-            padding: var(--spacing-lg);
-            border-radius: var(--radius-large);
-            box-shadow: var(--shadow-medium);
+            background: var(--neutral-200);
+            border-radius: var(--radius-pill);
+            padding: var(--spacing-xs);
         }
 
         .step {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
-            padding: var(--spacing-sm) var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-lg);
             border-radius: var(--radius-pill);
-            color: var(--text-secondary);
             font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-body-medium);
+            color: var(--text-secondary);
             transition: all 0.3s ease;
         }
 
         .step.active {
-            background: var(--primary-default);
-            color: var(--text-on-primary);
+            background: var(--neutral-100);
+            color: var(--primary-default);
+            box-shadow: var(--shadow-light);
         }
 
         .step.completed {
-            background: var(--status-success);
-            color: var(--text-on-primary);
+            color: var(--status-success);
         }
 
         .step-number {
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            background: var(--neutral-300);
+            background: var(--neutral-400);
+            color: var(--text-on-primary);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: var(--font-size-body-small);
-            font-weight: var(--font-weight-semibold);
+            font-weight: var(--font-weight-medium);
         }
 
         .step.active .step-number {
-            background: var(--text-on-primary);
-            color: var(--primary-default);
+            background: var(--primary-default);
         }
 
         .step.completed .step-number {
-            background: var(--text-on-primary);
-            color: var(--status-success);
-        }
-
-        .step-connector {
-            width: 40px;
-            height: 2px;
-            background: var(--neutral-300);
-            margin: 0 var(--spacing-sm);
-        }
-
-        .step.completed + .step-connector {
             background: var(--status-success);
         }
 
-        /* Progress Bar */
         .progress-container {
             margin-bottom: var(--spacing-xl);
         }
@@ -658,91 +285,250 @@
 
         .progress-text {
             text-align: center;
-            margin-top: var(--spacing-xs);
+            margin-top: var(--spacing-sm);
             font-size: var(--font-size-body-small);
             color: var(--text-secondary);
         }
 
-        /* Form Actions */
+        .form-section {
+            background: var(--neutral-100);
+            border-radius: var(--radius-large);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .section-title {
+            font-size: var(--font-size-h2);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: var(--font-size-body-medium);
+            font-weight: var(--font-weight-medium);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .required {
+            color: var(--status-error);
+        }
+
+        .form-group input,
+        .form-group select {
+            background: var(--neutral-200);
+            border-radius: var(--radius-medium);
+            border: 1px solid var(--neutral-400);
+            padding: 10px 12px;
+            color: var(--text-primary);
+            font-size: var(--font-size-body-medium);
+            font-family: var(--font-family);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-default);
+            box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.1);
+        }
+
+        .form-group input.error,
+        .form-group select.error {
+            border-color: var(--status-error);
+        }
+
+        .error-message {
+            color: var(--status-error);
+            font-size: var(--font-size-body-small);
+            margin-top: var(--spacing-xs);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-medium);
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-button);
+            font-family: var(--font-family);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-default);
+            color: var(--text-on-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-secondary {
+            background: var(--neutral-300);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--neutral-400);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-default);
+            border: 1px solid var(--primary-default);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-default);
+            color: var(--text-on-primary);
+        }
+
         .form-actions {
             display: flex;
             justify-content: space-between;
-            gap: var(--spacing-md);
+            align-items: center;
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-lg);
             border-top: 1px solid var(--neutral-300);
         }
 
-        .form-summary {
+        /* Summary Section */
+        .summary-section {
             background: var(--neutral-200);
-            padding: var(--spacing-lg);
-            border-radius: var(--radius-medium);
-            margin-bottom: var(--spacing-lg);
+            border-radius: var(--radius-large);
+            padding: var(--spacing-xl);
+            margin-top: var(--spacing-lg);
         }
 
-        .form-summary h3 {
+        .summary-title {
             font-size: var(--font-size-h3);
             font-weight: var(--font-weight-semibold);
             color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
         }
 
         .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: var(--spacing-xs) 0;
-            border-bottom: 1px solid var(--neutral-300);
-        }
-
-        .summary-item:last-child {
-            border-bottom: none;
+            background: var(--neutral-100);
+            border-radius: var(--radius-medium);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-light);
         }
 
         .summary-label {
+            font-size: var(--font-size-body-small);
             color: var(--text-secondary);
-            font-size: var(--font-size-body-medium);
+            margin-bottom: var(--spacing-xs);
         }
 
         .summary-value {
-            color: var(--text-primary);
+            font-size: var(--font-size-body-medium);
             font-weight: var(--font-weight-medium);
+            color: var(--text-primary);
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: var(--spacing-md);
+            border-radius: var(--radius-medium);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
             font-size: var(--font-size-body-medium);
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
+        .status-message.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--status-success);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
 
+        .status-message.error {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--status-error);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .status-message.warning {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--status-warning);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--neutral-400);
+            border-top: 2px solid var(--primary-default);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
-                padding: var(--spacing-md);
+                height: auto;
+                position: relative;
             }
 
             .main-content {
-                padding: var(--spacing-lg);
-            }
-
-            .dashboard-cards {
-                grid-template-columns: 1fr;
+                margin-left: 0;
+                padding: var(--spacing-md);
             }
 
             .form-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .filters {
-                flex-direction: column;
-            }
-
-            .data-table {
-                font-size: 12px;
-            }
-
-            .data-table th,
-            .data-table td {
-                padding: var(--spacing-sm);
             }
 
             .form-steps {
@@ -750,247 +536,185 @@
                 gap: var(--spacing-sm);
             }
 
-            .step-connector {
-                display: none;
-            }
-
             .form-actions {
                 flex-direction: column;
+                gap: var(--spacing-md);
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 480px) {
+            .content-section {
+                padding: var(--spacing-md);
+            }
+
+            .form-section {
+                padding: var(--spacing-md);
+            }
+
             .header h1 {
                 font-size: var(--font-size-h2);
-            }
-
-            .card-value {
-                font-size: var(--font-size-h2);
-            }
-
-            .btn-primary,
-            .btn-secondary {
-                padding: var(--spacing-xs) var(--spacing-md);
-                font-size: var(--font-size-body-small);
             }
         }
     </style>
 </head>
 <body>
-    <div class="connection-status" id="connectionStatus">🔄 Conectando...</div>
-    
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">
-                <i class="fas fa-chart-line"></i>
-                GoManage
+                <div class="logo-icon">📊</div>
+                <h2>GoManage</h2>
             </div>
             
             <div class="nav-section">
-                <h3>PRINCIPAL</h3>
-                <div class="nav-item active" onclick="showSection('dashboard')">
-                    <span><i class="fas fa-home"></i> Dashboard</span>
+                <div class="nav-title">Principal</div>
+                <div class="nav-item" onclick="showSection('dashboard')">
+                    <span>🏠 Dashboard</span>
                     <span class="badge">1</span>
                 </div>
             </div>
             
             <div class="nav-section">
-                <h3>GESTIÓN</h3>
+                <div class="nav-title">Gestión</div>
                 <div class="nav-item" onclick="showSection('customers')">
-                    <span><i class="fas fa-users"></i> Clientes</span>
+                    <span>👥 Clientes</span>
                     <span class="badge">2</span>
                 </div>
-                <div class="nav-item" onclick="showSection('customer-create')">
-                    <span><i class="fas fa-user-plus"></i> Alta de Clientes</span>
+                <div class="nav-item active" onclick="showSection('customer-form')">
+                    <span>➕ Alta de Clientes</span>
                     <span class="badge">3</span>
                 </div>
                 <div class="nav-item" onclick="showSection('products')">
-                    <span><i class="fas fa-box"></i> Productos</span>
+                    <span>📦 Productos</span>
                     <span class="badge">4</span>
                 </div>
                 <div class="nav-item" onclick="showSection('orders')">
-                    <span><i class="fas fa-shopping-cart"></i> Pedidos</span>
+                    <span>🛒 Pedidos</span>
                     <span class="badge">5</span>
                 </div>
                 <div class="nav-item" onclick="showSection('sales-orders')">
-                    <span><i class="fas fa-file-invoice"></i> Pedidos de Venta</span>
+                    <span>📋 Pedidos de Venta</span>
                     <span class="badge">6</span>
-                </div>
-                <div class="nav-item" onclick="showSection('advanced-orders')">
-                    <span><i class="fas fa-cogs"></i> Gestión Avanzada</span>
-                    <span class="badge">7</span>
                 </div>
             </div>
             
             <div class="nav-section">
-                <h3>ANÁLISIS</h3>
+                <div class="nav-title">Análisis</div>
                 <div class="nav-item" onclick="showSection('analytics')">
-                    <span><i class="fas fa-chart-bar"></i> Análisis</span>
+                    <span>📊 Analytics</span>
+                    <span class="badge">7</span>
+                </div>
+                <div class="nav-item" onclick="showSection('advanced-orders')">
+                    <span>⚙️ Gestión Avanzada</span>
                     <span class="badge">8</span>
                 </div>
                 <div class="nav-item" onclick="showSection('chat-mcp')">
-                    <span><i class="fas fa-robot"></i> Chat MCP</span>
+                    <span>🤖 Chat MCP</span>
                     <span class="badge">9</span>
                 </div>
                 <div class="nav-item" onclick="showSection('mejoras')">
-                    <span><i class="fas fa-lightbulb"></i> Mejoras</span>
+                    <span>📈 Mejoras</span>
                     <span class="badge">10</span>
                 </div>
             </div>
         </div>
-        
+
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Dashboard Section -->
-            <div class="content-section active" id="dashboard">
-                <div class="header">
-                    <h1><i class="fas fa-tachometer-alt"></i> Dashboard Ejecutivo</h1>
-                    <p>Resumen general de métricas de negocio y estado del sistema</p>
-                </div>
-                
-                <div class="dashboard-cards">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Total Clientes</div>
-                            <i class="fas fa-users" style="color: var(--primary-default);"></i>
-                        </div>
-                        <div class="card-value" id="total-customers">-</div>
-                        <div class="card-change positive">+5.2% vs mes anterior</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Total Productos</div>
-                            <i class="fas fa-box" style="color: var(--secondary-default);"></i>
-                        </div>
-                        <div class="card-value" id="total-products">-</div>
-                        <div class="card-change positive">+2.1% vs mes anterior</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Pedidos Activos</div>
-                            <i class="fas fa-shopping-cart" style="color: var(--status-warning);"></i>
-                        </div>
-                        <div class="card-value" id="active-orders">-</div>
-                        <div class="card-change negative">-1.3% vs mes anterior</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Facturación Mensual</div>
-                            <i class="fas fa-euro-sign" style="color: var(--status-info);"></i>
-                        </div>
-                        <div class="card-value" id="monthly-revenue">-</div>
-                        <div class="card-change positive">+8.7% vs mes anterior</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Customer Create Section -->
-            <div class="content-section" id="customer-create">
+            <!-- Customer Form Section -->
+            <div class="content-section" id="customer-form">
                 <div class="header">
                     <h1><i class="fas fa-user-plus"></i> Alta de Clientes</h1>
                     <p>Crear nuevo cliente en el sistema GoManage</p>
                 </div>
 
-                <!-- Form Steps -->
-                <div class="form-steps">
-                    <div class="step active" id="step-1">
-                        <div class="step-number">1</div>
-                        <span>Datos Básicos</span>
+                <div class="customer-form-container">
+                    <!-- Progress Steps -->
+                    <div class="form-steps">
+                        <div class="step active" id="step1">
+                            <div class="step-number">1</div>
+                            <span>Datos Básicos</span>
+                        </div>
+                        <div class="step" id="step2">
+                            <div class="step-number">2</div>
+                            <span>Información Comercial</span>
+                        </div>
+                        <div class="step" id="step3">
+                            <div class="step-number">3</div>
+                            <span>Confirmación</span>
+                        </div>
                     </div>
-                    <div class="step-connector"></div>
-                    <div class="step" id="step-2">
-                        <div class="step-number">2</div>
-                        <span>Información Comercial</span>
-                    </div>
-                    <div class="step-connector"></div>
-                    <div class="step" id="step-3">
-                        <div class="step-number">3</div>
-                        <span>Confirmación</span>
-                    </div>
-                </div>
 
-                <!-- Progress Bar -->
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 33%;"></div>
+                    <!-- Progress Bar -->
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 33.33%"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">Paso 1 de 3 - Datos Básicos</div>
                     </div>
-                    <div class="progress-text" id="progressText">Paso 1 de 3 - Datos Básicos</div>
-                </div>
 
-                <!-- Customer Form -->
-                <div class="form-container">
+                    <!-- Status Messages -->
+                    <div id="statusMessages"></div>
+
+                    <!-- Customer Form -->
                     <form id="customerForm">
                         <!-- Step 1: Basic Data -->
-                        <div class="form-step active" id="form-step-1">
-                            <h2 style="margin-bottom: var(--spacing-lg); color: var(--text-primary);">Datos Básicos del Cliente</h2>
+                        <div class="form-section" id="basicDataSection">
+                            <h2 class="section-title">
+                                <i class="fas fa-user"></i>
+                                Datos Básicos del Cliente
+                            </h2>
+                            
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label for="business_name">Razón Social *</label>
-                                    <input type="text" id="business_name" name="business_name" required 
-                                           placeholder="Ej: ACME Distribuciones S.L.">
+                                    <label for="businessName">Razón Social <span class="required">*</span></label>
+                                    <input type="text" id="businessName" name="business_name" required>
+                                    <div class="error-message" id="businessNameError"></div>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="name">Nombre Comercial</label>
-                                    <input type="text" id="name" name="name" 
-                                           placeholder="Ej: ACME Store">
+                                    <label for="commercialName">Nombre Comercial</label>
+                                    <input type="text" id="commercialName" name="name">
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="vat_number">CIF/NIF *</label>
-                                    <input type="text" id="vat_number" name="vat_number" required 
-                                           placeholder="Ej: B12345678">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" 
-                                           placeholder="contacto@empresa.com">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="phone">Teléfono</label>
-                                    <input type="tel" id="phone" name="phone" 
-                                           placeholder="912345678">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="mobile_phone">Móvil</label>
-                                    <input type="tel" id="mobile_phone" name="mobile_phone" 
-                                           placeholder="612345678">
+                                    <label for="vatNumber">CIF/NIF <span class="required">*</span></label>
+                                    <input type="text" id="vatNumber" name="vat_number" placeholder="Ej: B12345678" required>
+                                    <div class="error-message" id="vatNumberError"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Step 2: Commercial Info -->
-                        <div class="form-step" id="form-step-2">
-                            <h2 style="margin-bottom: var(--spacing-lg); color: var(--text-primary);">Información Comercial</h2>
+                        <!-- Step 2: Commercial Information -->
+                        <div class="form-section" id="commercialInfoSection" style="display: none;">
+                            <h2 class="section-title">
+                                <i class="fas fa-building"></i>
+                                Información Comercial
+                            </h2>
+                            
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label for="street_name">Dirección</label>
-                                    <input type="text" id="street_name" name="street_name" 
-                                           placeholder="Calle Principal, 123">
+                                    <label for="address">Dirección</label>
+                                    <input type="text" id="address" name="street_name" placeholder="Calle Principal, 123">
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="postal_code">Código Postal</label>
-                                    <input type="text" id="postal_code" name="postal_code" 
-                                           placeholder="28001">
+                                    <label for="postalCode">Código Postal</label>
+                                    <input type="text" id="postalCode" name="postal_code" placeholder="28001">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="city">Ciudad</label>
-                                    <input type="text" id="city" name="city" 
-                                           placeholder="Madrid">
+                                    <input type="text" id="city" name="city" placeholder="Madrid">
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="province_id">Provincia</label>
-                                    <select id="province_id" name="province_id">
+                                    <label for="province">Provincia</label>
+                                    <select id="province" name="province_id">
                                         <option value="">Seleccionar provincia</option>
                                         <option value="1">Álava</option>
                                         <option value="2">Albacete</option>
@@ -1017,7 +741,7 @@
                                         <option value="23">Jaén</option>
                                         <option value="24">León</option>
                                         <option value="25">Lleida</option>
-                                        <option value="26">Rioja</option>
+                                        <option value="26">La Rioja</option>
                                         <option value="27">Lugo</option>
                                         <option value="28">Madrid</option>
                                         <option value="29">Málaga</option>
@@ -1026,7 +750,7 @@
                                         <option value="32">Ourense</option>
                                         <option value="33">Asturias</option>
                                         <option value="34">Palencia</option>
-                                        <option value="35">Palmas</option>
+                                        <option value="35">Las Palmas</option>
                                         <option value="36">Pontevedra</option>
                                         <option value="37">Salamanca</option>
                                         <option value="38">Santa Cruz de Tenerife</option>
@@ -1046,266 +770,69 @@
                                         <option value="52">Melilla</option>
                                     </select>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label for="payment_method_id">Forma de Pago</label>
-                                    <select id="payment_method_id" name="payment_method_id">
-                                        <option value="">Seleccionar forma de pago</option>
-                                        <option value="1">Contado</option>
-                                        <option value="2">Transferencia</option>
-                                        <option value="3">Tarjeta</option>
-                                        <option value="4">Cheque</option>
-                                        <option value="5">Pagaré</option>
-                                        <option value="6">Domiciliación</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="discount_id">Tipo de Descuento</label>
-                                    <select id="discount_id" name="discount_id">
-                                        <option value="">Sin descuento</option>
-                                        <option value="1">VIP (10%)</option>
-                                        <option value="2">Almacén (5%)</option>
-                                        <option value="3">Profesional (15%)</option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
 
                         <!-- Step 3: Confirmation -->
-                        <div class="form-step" id="form-step-3">
-                            <h2 style="margin-bottom: var(--spacing-lg); color: var(--text-primary);">Confirmación de Datos</h2>
-                            <div class="form-summary" id="formSummary">
-                                <h3>Resumen del Cliente</h3>
-                                <div id="summaryContent">
-                                    <!-- Dynamic summary content -->
+                        <div class="form-section" id="confirmationSection" style="display: none;">
+                            <h2 class="section-title">
+                                <i class="fas fa-check-circle"></i>
+                                Confirmación de Datos
+                            </h2>
+                            
+                            <div class="summary-section">
+                                <h3 class="summary-title">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    Resumen del Cliente
+                                </h3>
+                                <div class="summary-grid" id="customerSummary">
+                                    <!-- Dynamic content will be inserted here -->
                                 </div>
                             </div>
                         </div>
 
                         <!-- Form Actions -->
                         <div class="form-actions">
-                            <button type="button" class="btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">
-                                <i class="fas fa-arrow-left"></i> Anterior
+                            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">
+                                <i class="fas fa-arrow-left"></i>
+                                Anterior
                             </button>
-                            <div style="flex: 1;"></div>
-                            <button type="button" class="btn-outline" onclick="clearForm()">
-                                <i class="fas fa-times"></i> Limpiar
-                            </button>
-                            <button type="button" class="btn-primary" id="nextBtn" onclick="nextStep()">
-                                Siguiente <i class="fas fa-arrow-right"></i>
-                            </button>
-                            <button type="submit" class="btn-primary" id="submitBtn" style="display: none;">
-                                <i class="fas fa-save"></i> Crear Cliente
-                            </button>
+                            
+                            <div>
+                                <button type="button" class="btn btn-outline" onclick="clearForm()">
+                                    <i class="fas fa-times"></i>
+                                    Limpiar
+                                </button>
+                                <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                                    Siguiente
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">
+                                    <i class="fas fa-save"></i>
+                                    Crear Cliente
+                                </button>
+                            </div>
                         </div>
                     </form>
-                </div>
-            </div>
-
-            <!-- Other sections would go here -->
-            <!-- Customers Section -->
-            <div class="content-section" id="customers">
-                <div class="header">
-                    <h1><i class="fas fa-users"></i> Gestión de Clientes</h1>
-                    <p>Lista completa de clientes registrados en el sistema</p>
-                </div>
-                
-                <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Buscar clientes por nombre, CIF, ciudad..." id="customer-search">
-                    <div class="dropdown" id="customer-dropdown" style="display: none;"></div>
-                </div>
-                
-                <div id="customers-container">
-                    <div class="loading">Cargando clientes...</div>
-                </div>
-            </div>
-
-            <!-- Products Section -->
-            <div class="content-section" id="products">
-                <div class="header">
-                    <h1><i class="fas fa-box"></i> Catálogo de Productos</h1>
-                    <p>Gestión completa del inventario y catálogo de productos</p>
-                </div>
-                
-                <div id="products-container">
-                    <div class="loading">Cargando productos...</div>
-                </div>
-            </div>
-
-            <!-- Orders Section -->
-            <div class="content-section" id="orders">
-                <div class="header">
-                    <h1><i class="fas fa-shopping-cart"></i> Creación de Pedidos</h1>
-                    <p>Sistema completo para crear y gestionar pedidos de clientes</p>
-                </div>
-                
-                <div id="orders-container">
-                    <div class="loading">Cargando sistema de pedidos...</div>
-                </div>
-            </div>
-
-            <!-- Sales Orders Section -->
-            <div class="content-section" id="sales-orders">
-                <div class="header">
-                    <h1><i class="fas fa-file-invoice"></i> Pedidos de Venta</h1>
-                    <p>Gestión y seguimiento de todos los pedidos de venta</p>
-                </div>
-                
-                <div id="sales-orders-container">
-                    <div class="loading">Cargando pedidos de venta...</div>
-                </div>
-            </div>
-
-            <!-- Advanced Orders Section -->
-            <div class="content-section" id="advanced-orders">
-                <div class="header">
-                    <h1><i class="fas fa-cogs"></i> Gestión Avanzada de Pedidos</h1>
-                    <p>Sistema completo de seguimiento y gestión del ciclo de vida de pedidos</p>
-                </div>
-                
-                <div id="advanced-orders-container">
-                    <div class="loading">Cargando gestión avanzada...</div>
-                </div>
-            </div>
-
-            <!-- Analytics Section -->
-            <div class="content-section" id="analytics">
-                <div class="header">
-                    <h1><i class="fas fa-chart-bar"></i> Análisis y Reportes</h1>
-                    <p>Dashboard avanzado con métricas y análisis en tiempo real</p>
-                </div>
-                
-                <div id="analytics-container">
-                    <div class="loading">Cargando análisis...</div>
-                </div>
-            </div>
-
-            <!-- Chat MCP Section -->
-            <div class="content-section" id="chat-mcp">
-                <div class="header">
-                    <h1><i class="fas fa-robot"></i> Chat MCP - Asistente Inteligente</h1>
-                    <p>Consulte datos del sistema y genere documentos con nuestro asistente IA</p>
-                </div>
-                
-                <div id="chat-mcp-container">
-                    <div class="loading">Cargando asistente MCP...</div>
-                </div>
-            </div>
-
-            <!-- Mejoras Section -->
-            <div class="content-section" id="mejoras">
-                <div class="header">
-                    <h1><i class="fas fa-lightbulb"></i> Análisis y Mejoras</h1>
-                    <p>Recomendaciones inteligentes para optimizar el negocio</p>
-                </div>
-                
-                <div id="mejoras-container">
-                    <div class="loading">Cargando análisis de mejoras...</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Global variables
         let currentStep = 1;
-        let totalSteps = 3;
-        let isAuthenticated = false;
+        const totalSteps = 3;
 
-        // Initialize application
-        document.addEventListener('DOMContentLoaded', function() {
-            authenticateWithGoManage();
-            setupFormValidation();
-        });
-
-        // Authentication
-        async function authenticateWithGoManage() {
-            try {
-                updateConnectionStatus('connecting');
-                
-                const response = await fetch('/api/auth', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    isAuthenticated = true;
-                    updateConnectionStatus('connected');
-                    loadDashboardData();
-                } else {
-                    updateConnectionStatus('disconnected');
-                }
-                
-            } catch (error) {
-                console.error('Error de autenticación:', error);
-                updateConnectionStatus('disconnected');
-            }
+        function showSection(section) {
+            // This would be implemented to show different sections
+            console.log('Showing section:', section);
         }
 
-        function updateConnectionStatus(status) {
-            const statusElement = document.getElementById('connectionStatus');
-            
-            switch(status) {
-                case 'connecting':
-                    statusElement.textContent = '🔄 Conectando...';
-                    statusElement.className = 'connection-status';
-                    break;
-                case 'connected':
-                    statusElement.textContent = '✅ Conectado';
-                    statusElement.className = 'connection-status connected';
-                    break;
-                case 'disconnected':
-                    statusElement.textContent = '❌ Desconectado';
-                    statusElement.className = 'connection-status disconnected';
-                    break;
-            }
-        }
-
-        // Dashboard data loading
-        async function loadDashboardData() {
-            try {
-                const response = await fetch('/api/analytics/dashboard');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    document.getElementById('total-customers').textContent = data.data.customers.total.toLocaleString();
-                    document.getElementById('total-products').textContent = '1,247'; // Sample data
-                    document.getElementById('active-orders').textContent = '89'; // Sample data
-                    document.getElementById('monthly-revenue').textContent = '€45,678'; // Sample data
-                }
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-            }
-        }
-
-        // Navigation
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Update navigation
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.target.closest('.nav-item').classList.add('active');
-        }
-
-        // Form Steps Management
         function nextStep() {
             if (currentStep < totalSteps) {
                 if (validateCurrentStep()) {
                     currentStep++;
-                    updateFormStep();
+                    updateStepDisplay();
                 }
             }
         }
@@ -1313,162 +840,219 @@
         function previousStep() {
             if (currentStep > 1) {
                 currentStep--;
-                updateFormStep();
+                updateStepDisplay();
             }
         }
 
-        function updateFormStep() {
-            // Update step indicators
-            document.querySelectorAll('.step').forEach((step, index) => {
+        function updateStepDisplay() {
+            // Hide all sections
+            document.getElementById('basicDataSection').style.display = 'none';
+            document.getElementById('commercialInfoSection').style.display = 'none';
+            document.getElementById('confirmationSection').style.display = 'none';
+
+            // Remove active class from all steps
+            document.querySelectorAll('.step').forEach(step => {
                 step.classList.remove('active', 'completed');
-                if (index + 1 < currentStep) {
-                    step.classList.add('completed');
-                } else if (index + 1 === currentStep) {
-                    step.classList.add('active');
-                }
             });
 
-            // Update form steps
-            document.querySelectorAll('.form-step').forEach((step, index) => {
-                step.classList.remove('active');
-                if (index + 1 === currentStep) {
-                    step.classList.add('active');
-                }
-            });
+            // Show current section and update step
+            if (currentStep === 1) {
+                document.getElementById('basicDataSection').style.display = 'block';
+                document.getElementById('step1').classList.add('active');
+                document.getElementById('prevBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'inline-flex';
+                document.getElementById('submitBtn').style.display = 'none';
+            } else if (currentStep === 2) {
+                document.getElementById('commercialInfoSection').style.display = 'block';
+                document.getElementById('step1').classList.add('completed');
+                document.getElementById('step2').classList.add('active');
+                document.getElementById('prevBtn').style.display = 'inline-flex';
+                document.getElementById('nextBtn').style.display = 'inline-flex';
+                document.getElementById('submitBtn').style.display = 'none';
+            } else if (currentStep === 3) {
+                document.getElementById('confirmationSection').style.display = 'block';
+                document.getElementById('step1').classList.add('completed');
+                document.getElementById('step2').classList.add('completed');
+                document.getElementById('step3').classList.add('active');
+                document.getElementById('prevBtn').style.display = 'inline-flex';
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-flex';
+                updateSummary();
+            }
 
             // Update progress bar
-            const progress = (currentStep / totalSteps) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
+            const progressPercentage = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progressPercentage + '%';
             
-            const stepTexts = [
-                'Paso 1 de 3 - Datos Básicos',
-                'Paso 2 de 3 - Información Comercial',
-                'Paso 3 de 3 - Confirmación'
-            ];
-            document.getElementById('progressText').textContent = stepTexts[currentStep - 1];
-
-            // Update buttons
-            document.getElementById('prevBtn').style.display = currentStep > 1 ? 'block' : 'none';
-            document.getElementById('nextBtn').style.display = currentStep < totalSteps ? 'block' : 'none';
-            document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'block' : 'none';
-
-            // Update summary if on last step
-            if (currentStep === totalSteps) {
-                updateFormSummary();
-            }
+            // Update progress text
+            const stepNames = ['Datos Básicos', 'Información Comercial', 'Confirmación de Datos'];
+            document.getElementById('progressText').textContent = `Paso ${currentStep} de ${totalSteps} - ${stepNames[currentStep - 1]}`;
         }
 
         function validateCurrentStep() {
-            const currentFormStep = document.getElementById(`form-step-${currentStep}`);
-            const requiredFields = currentFormStep.querySelectorAll('input[required], select[required]');
-            
+            clearErrors();
             let isValid = true;
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.style.borderColor = 'var(--status-error)';
+
+            if (currentStep === 1) {
+                const businessName = document.getElementById('businessName').value.trim();
+                const vatNumber = document.getElementById('vatNumber').value.trim();
+
+                if (!businessName) {
+                    showError('businessNameError', 'La razón social es obligatoria');
+                    document.getElementById('businessName').classList.add('error');
                     isValid = false;
-                } else {
-                    field.style.borderColor = 'var(--neutral-400)';
                 }
-            });
-            
-            if (!isValid) {
-                alert('Por favor, complete todos los campos obligatorios.');
+
+                if (!vatNumber) {
+                    showError('vatNumberError', 'El CIF/NIF es obligatorio');
+                    document.getElementById('vatNumber').classList.add('error');
+                    isValid = false;
+                } else if (!validateVatNumber(vatNumber)) {
+                    showError('vatNumberError', 'Formato de CIF/NIF incorrecto');
+                    document.getElementById('vatNumber').classList.add('error');
+                    isValid = false;
+                }
             }
-            
+
             return isValid;
         }
 
-        function updateFormSummary() {
-            const form = document.getElementById('customerForm');
-            const formData = new FormData(form);
-            const summaryContent = document.getElementById('summaryContent');
-            
-            const summaryItems = [
-                { label: 'Razón Social', value: formData.get('business_name') },
-                { label: 'Nombre Comercial', value: formData.get('name') },
-                { label: 'CIF/NIF', value: formData.get('vat_number') },
-                { label: 'Email', value: formData.get('email') },
-                { label: 'Teléfono', value: formData.get('phone') },
-                { label: 'Dirección', value: formData.get('street_name') },
-                { label: 'Ciudad', value: formData.get('city') },
-                { label: 'Código Postal', value: formData.get('postal_code') }
-            ];
-            
-            summaryContent.innerHTML = summaryItems
-                .filter(item => item.value)
-                .map(item => `
-                    <div class="summary-item">
-                        <span class="summary-label">${item.label}:</span>
-                        <span class="summary-value">${item.value}</span>
-                    </div>
-                `).join('');
+        function validateVatNumber(vat) {
+            // Basic Spanish VAT validation
+            const vatRegex = /^[A-Z]\d{8}$|^\d{8}[A-Z]$/;
+            return vatRegex.test(vat.toUpperCase());
         }
 
-        function setupFormValidation() {
-            const form = document.getElementById('customerForm');
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('customerSummary');
+            const formData = new FormData(document.getElementById('customerForm'));
             
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                if (!isAuthenticated) {
-                    alert('Error: No hay conexión con GoManage. Intente reconectar.');
-                    return;
-                }
-                
-                const formData = new FormData(form);
-                const customerData = Object.fromEntries(formData.entries());
-                
-                // Set default values
-                customerData.country_id = 'ES';
-                customerData.currency_id = 'eur';
-                customerData.language_id = 'cas';
-                customerData.periodicity_id = '1';
-                
-                try {
-                    const response = await fetch('/api/customers', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(customerData)
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.status === 'success') {
-                        alert('✅ Cliente creado exitosamente');
-                        clearForm();
-                    } else {
-                        alert('❌ Error: ' + (result.error || result.message || 'Error desconocido'));
-                    }
-                    
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('❌ Error de conexión al crear el cliente');
-                }
-            });
+            const summaryItems = [
+                { label: 'Razón Social', value: formData.get('business_name') || '-' },
+                { label: 'Nombre Comercial', value: formData.get('name') || '-' },
+                { label: 'CIF/NIF', value: formData.get('vat_number') || '-' },
+                { label: 'Dirección', value: formData.get('street_name') || '-' },
+                { label: 'Código Postal', value: formData.get('postal_code') || '-' },
+                { label: 'Ciudad', value: formData.get('city') || '-' },
+                { label: 'Provincia', value: getProvinceText(formData.get('province_id')) || '-' }
+            ];
+
+            summary.innerHTML = summaryItems.map(item => `
+                <div class="summary-item">
+                    <div class="summary-label">${item.label}</div>
+                    <div class="summary-value">${item.value}</div>
+                </div>
+            `).join('');
+        }
+
+        function getProvinceText(provinceId) {
+            const select = document.getElementById('province');
+            const option = select.querySelector(`option[value="${provinceId}"]`);
+            return option ? option.textContent : '';
         }
 
         function clearForm() {
-            document.getElementById('customerForm').reset();
-            currentStep = 1;
-            updateFormStep();
+            if (confirm('¿Estás seguro de que quieres limpiar el formulario?')) {
+                document.getElementById('customerForm').reset();
+                currentStep = 1;
+                updateStepDisplay();
+                clearErrors();
+                showStatusMessage('Formulario limpiado', 'warning');
+            }
         }
 
-        // Auto-fill name from business_name
-        document.addEventListener('DOMContentLoaded', function() {
-            const businessNameInput = document.getElementById('business_name');
-            const nameInput = document.getElementById('name');
+        function showStatusMessage(message, type = 'info') {
+            const container = document.getElementById('statusMessages');
+            const messageEl = document.createElement('div');
+            messageEl.className = `status-message ${type}`;
             
-            if (businessNameInput && nameInput) {
-                businessNameInput.addEventListener('input', function() {
-                    if (!nameInput.value) {
-                        nameInput.value = this.value;
-                    }
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+            
+            messageEl.innerHTML = `
+                <i class="${icons[type]}"></i>
+                ${message}
+            `;
+            
+            container.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 5000);
+        }
+
+        // Form submission
+        document.getElementById('customerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<div class="spinner"></div> Creando...';
+            submitBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(this);
+                const customerData = Object.fromEntries(formData.entries());
+                
+                // Add required fields with defaults
+                customerData.country_id = 'ES';
+                customerData.currency_id = 'eur';
+                customerData.language_id = 'cas';
+                
+                const response = await fetch('/api/customers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customerData)
                 });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showStatusMessage('Cliente creado exitosamente', 'success');
+                    setTimeout(() => {
+                        clearForm();
+                    }, 2000);
+                } else {
+                    showStatusMessage(`Error: ${result.error || result.message}`, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showStatusMessage('Error de conexión. Inténtalo de nuevo.', 'error');
+            } finally {
+                // Restore button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
             }
         });
+
+        // Auto-fill commercial name when business name changes
+        document.getElementById('businessName').addEventListener('input', function() {
+            const commercialName = document.getElementById('commercialName');
+            if (!commercialName.value) {
+                commercialName.value = this.value;
+            }
+        });
+
+        // Initialize
+        updateStepDisplay();
     </script>
 </body>
 </html>
