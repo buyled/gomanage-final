@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="autocomplete" content="off">
     <title>GoManage - Sistema de Gestión Empresarial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* CSS Variables from Design System */
         :root {
             /* Colors */
             --primary-default: #7B61FF;
             --primary-light: #A290FF;
             --primary-dark: #5D45DF;
+            
             --secondary-default: #4CAF50;
             --secondary-light: #8BC34A;
             --secondary-dark: #388E3C;
             
-            /* Neutral Colors */
             --neutral-100: #FFFFFF;
             --neutral-200: #F8F9FA;
             --neutral-300: #EDF0F3;
@@ -28,23 +28,15 @@
             --neutral-800: #4F5D6B;
             --neutral-900: #2C3E50;
             
-            /* Text Colors */
             --text-primary: #2C3E50;
             --text-secondary: #7A8795;
             --text-disabled: #A9B3BE;
             --text-on-primary: #FFFFFF;
             
-            /* Status Colors */
             --status-success: #4CAF50;
             --status-warning: #FFC107;
             --status-error: #F44336;
             --status-info: #2196F3;
-            
-            /* Border Radius */
-            --radius-small: 8px;
-            --radius-medium: 16px;
-            --radius-large: 24px;
-            --radius-pill: 999px;
             
             /* Spacing */
             --spacing-xxs: 4px;
@@ -55,23 +47,31 @@
             --spacing-xl: 32px;
             --spacing-xxl: 48px;
             
+            /* Border Radius */
+            --radius-small: 8px;
+            --radius-medium: 16px;
+            --radius-large: 24px;
+            --radius-pill: 999px;
+            
             /* Shadows */
             --shadow-light: 0px 2px 4px rgba(0, 0, 0, 0.05);
             --shadow-medium: 0px 4px 8px rgba(0, 0, 0, 0.08);
             --shadow-hard: 0px 8px 16px rgba(0, 0, 0, 0.1);
-            --shadow-glow: 0px 0px 20px rgba(123, 97, 255, 0.15);
             
             /* Typography */
             --font-family: 'Inter', sans-serif;
-            --font-h1-size: 32px;
-            --font-h1-weight: 700;
-            --font-h2-size: 24px;
-            --font-h2-weight: 600;
-            --font-h3-size: 18px;
-            --font-h3-weight: 600;
-            --font-body-size: 14px;
-            --font-body-weight: 400;
-            --font-button-weight: 500;
+            --font-size-h1: 32px;
+            --font-size-h2: 24px;
+            --font-size-h3: 18px;
+            --font-size-body-large: 16px;
+            --font-size-body-medium: 14px;
+            --font-size-body-small: 12px;
+            --font-size-button: 14px;
+            --font-size-caption: 10px;
+            
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
         }
 
         * {
@@ -82,11 +82,12 @@
 
         body {
             font-family: var(--font-family);
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--neutral-200);
             color: var(--text-primary);
-            font-size: var(--font-body-size);
-            line-height: 1.6;
             min-height: 100vh;
+            font-size: var(--font-size-body-medium);
+            font-weight: var(--font-weight-normal);
+            line-height: 1.5;
         }
 
         .container {
@@ -94,129 +95,76 @@
             min-height: 100vh;
         }
 
-        /* Sidebar mejorado */
         .sidebar {
             width: 280px;
             background: var(--neutral-100);
-            border-right: 1px solid var(--neutral-300);
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             box-shadow: var(--shadow-medium);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1000;
+            color: var(--text-primary);
         }
 
         .logo {
+            font-size: var(--font-size-h2);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-xl);
+            color: var(--primary-default);
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-xl);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 2px solid var(--neutral-300);
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
-            border-radius: var(--radius-medium);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-        }
-
-        .logo span {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
         }
 
         .nav-section {
             margin-bottom: var(--spacing-lg);
         }
 
-        .nav-title {
-            font-size: 12px;
-            font-weight: 600;
+        .nav-section h3 {
+            font-size: var(--font-size-caption);
             color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             margin-bottom: var(--spacing-sm);
-            padding-left: var(--spacing-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: var(--font-weight-medium);
         }
 
         .nav-item {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: var(--spacing-sm) var(--spacing-md);
-            margin-bottom: var(--spacing-xs);
-            border-radius: var(--radius-medium);
+            align-items: center;
+            padding: var(--spacing-xs) var(--spacing-md);
+            margin: var(--spacing-xs) 0;
+            border-radius: var(--radius-pill);
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
+            color: var(--text-secondary);
+            font-weight: var(--font-weight-medium);
         }
 
         .nav-item:hover {
-            background: var(--neutral-200);
-            transform: translateX(4px);
+            background: var(--neutral-300);
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
-            color: white;
-            box-shadow: var(--shadow-glow);
+            background: var(--neutral-300);
+            color: var(--primary-default);
         }
 
-        .nav-item .badge {
-            background: var(--neutral-400);
-            color: var(--text-primary);
-            padding: 2px 8px;
+        .badge {
+            background: var(--primary-default);
+            color: var(--text-on-primary);
+            padding: var(--spacing-xxs) var(--spacing-xs);
             border-radius: var(--radius-pill);
-            font-size: 11px;
-            font-weight: 600;
+            font-size: var(--font-size-caption);
+            font-weight: var(--font-weight-medium);
         }
 
-        .nav-item.active .badge {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .connection-status {
-            position: absolute;
-            bottom: var(--spacing-lg);
-            left: var(--spacing-lg);
-            right: var(--spacing-lg);
-            padding: var(--spacing-sm);
-            border-radius: var(--radius-medium);
-            text-align: center;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .connection-status.connected {
-            background: rgba(76, 175, 80, 0.1);
-            color: var(--status-success);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-        }
-
-        /* Main content */
         .main-content {
             flex: 1;
-            margin-left: 280px;
             padding: var(--spacing-xl);
-            background: transparent;
+            background: var(--neutral-200);
         }
 
         .content-section {
             display: none;
-            background: var(--neutral-100);
-            border-radius: var(--radius-large);
-            box-shadow: var(--shadow-medium);
-            overflow: hidden;
         }
 
         .content-section.active {
@@ -224,1202 +172,1303 @@
         }
 
         .header {
-            background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
-            color: white;
-            padding: var(--spacing-xl);
-            text-align: center;
+            margin-bottom: var(--spacing-xl);
         }
 
         .header h1 {
-            font-size: var(--font-h1-size);
-            font-weight: var(--font-h1-weight);
+            font-size: var(--font-size-h1);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
             margin-bottom: var(--spacing-sm);
+            line-height: 1.2;
         }
 
         .header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        /* Wizard Progress mejorado */
-        .wizard-progress {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: var(--spacing-xl);
-            background: var(--neutral-200);
-            position: relative;
-        }
-
-        .wizard-progress::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 20%;
-            right: 20%;
-            height: 2px;
-            background: var(--neutral-400);
-            z-index: 1;
-        }
-
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-sm);
-            position: relative;
-            z-index: 2;
-            background: var(--neutral-200);
-            padding: var(--spacing-sm);
-            min-width: 120px;
-        }
-
-        .step-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--neutral-400);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            transition: all 0.3s ease;
-            border: 4px solid var(--neutral-300);
-        }
-
-        .step.active .step-icon {
-            background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
-            border-color: var(--primary-default);
-            box-shadow: var(--shadow-glow);
-            transform: scale(1.1);
-        }
-
-        .step.completed .step-icon {
-            background: var(--status-success);
-            border-color: var(--status-success);
-        }
-
-        .step-label {
-            font-size: 12px;
-            font-weight: 600;
             color: var(--text-secondary);
-            text-align: center;
+            font-size: var(--font-size-body-large);
+            line-height: 1.5;
         }
 
-        .step.active .step-label {
-            color: var(--primary-default);
-        }
-
-        /* Wizard Form mejorado */
-        .wizard-form {
-            padding: var(--spacing-xl);
-        }
-
-        .wizard-step {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .wizard-step.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .step-header {
-            text-align: center;
-            margin-bottom: var(--spacing-xl);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 2px solid var(--neutral-300);
-        }
-
-        .step-header h2 {
-            font-size: var(--font-h2-size);
-            font-weight: var(--font-h2-weight);
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .step-header p {
-            color: var(--text-secondary);
-            font-size: 16px;
-        }
-
-        /* Form Grid mejorado */
-        .form-grid {
+        .dashboard-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: var(--spacing-lg);
             margin-bottom: var(--spacing-xl);
         }
 
-        .form-group {
-            position: relative;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .form-group.required label::after {
-            content: ' *';
-            color: var(--status-error);
-            font-weight: 600;
-        }
-
-        .form-group label {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            margin-bottom: var(--spacing-sm);
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 14px;
-        }
-
-        .label-icon {
-            font-size: 16px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .tooltip {
-            cursor: help;
-            color: var(--text-secondary);
-            margin-left: auto;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 2px solid var(--neutral-300);
-            border-radius: var(--radius-medium);
-            font-size: var(--font-body-size);
-            font-family: var(--font-family);
-            transition: all 0.3s ease;
+        .card {
             background: var(--neutral-100);
-            color: var(--text-primary);
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-default);
-            box-shadow: 0 0 0 4px rgba(123, 97, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .form-group input:invalid {
-            border-color: var(--status-error);
-        }
-
-        .form-group input:valid {
-            border-color: var(--status-success);
-        }
-
-        .field-status {
-            position: absolute;
-            right: var(--spacing-md);
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 16px;
-            margin-top: var(--spacing-lg);
-        }
-
-        .field-hint {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: var(--spacing-xs);
-            font-style: italic;
-        }
-
-        /* Checkbox mejorado */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md);
-            border: 2px solid var(--neutral-300);
-            border-radius: var(--radius-medium);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .checkbox-group:hover {
-            border-color: var(--primary-light);
-            background: rgba(123, 97, 255, 0.05);
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            cursor: pointer;
-            margin-bottom: 0 !important;
-            width: 100%;
-        }
-
-        .checkmark {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--neutral-400);
-            border-radius: var(--radius-small);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            display: none;
-        }
-
-        .checkbox-group input[type="checkbox"]:checked + .checkmark {
-            background: var(--primary-default);
-            border-color: var(--primary-default);
-        }
-
-        .checkbox-group input[type="checkbox"]:checked + .checkmark::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: 600;
-            font-size: 12px;
-        }
-
-        /* Resumen del cliente */
-        .customer-summary {
-            background: linear-gradient(135deg, var(--neutral-200), var(--neutral-300));
-            border-radius: var(--radius-large);
             padding: var(--spacing-lg);
-            margin-top: var(--spacing-xl);
-            border: 2px solid var(--neutral-400);
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow-medium);
+            transition: transform 0.3s ease;
         }
 
-        .customer-summary h3 {
-            margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
-            text-align: center;
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hard);
         }
 
-        .summary-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-        }
-
-        .summary-item {
-            background: white;
-            padding: var(--spacing-md);
-            border-radius: var(--radius-medium);
-            border: 1px solid var(--neutral-300);
-            text-align: center;
-        }
-
-        .summary-item strong {
-            display: block;
-            color: var(--text-secondary);
-            font-size: 12px;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .summary-item span {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        /* Navigation mejorada */
-        .wizard-navigation {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--spacing-xl);
-            background: var(--neutral-200);
-            border-top: 2px solid var(--neutral-300);
-            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
         }
 
-        .wizard-navigation button {
-            padding: var(--spacing-md) var(--spacing-xl);
-            border: none;
+        .card-title {
+            font-size: var(--font-size-body-medium);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .card-value {
+            font-size: var(--font-size-h1);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .card-change {
+            font-size: var(--font-size-body-small);
+            padding: var(--spacing-xxs) var(--spacing-xs);
+            border-radius: var(--radius-pill);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .card-change.positive { 
+            background: rgba(76, 175, 80, 0.1); 
+            color: var(--status-success); 
+        }
+        .card-change.negative { 
+            background: rgba(244, 67, 54, 0.1); 
+            color: var(--status-error); 
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-pill);
+            font-size: var(--font-size-body-small);
+            font-weight: var(--font-weight-medium);
+            z-index: 1000;
+        }
+
+        .connection-status.connected { 
+            background: rgba(76, 175, 80, 0.1); 
+            color: var(--status-success); 
+        }
+        .connection-status.disconnected { 
+            background: rgba(244, 67, 54, 0.1); 
+            color: var(--status-error); 
+        }
+
+        .form-container {
+            background: var(--neutral-100);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow-medium);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            font-size: var(--font-size-body-medium);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--neutral-400);
             border-radius: var(--radius-medium);
-            font-weight: 600;
-            font-size: var(--font-body-size);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            min-width: 140px;
-            justify-content: center;
+            font-size: var(--font-size-body-medium);
+            background: var(--neutral-200);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-default);
+            box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.1);
+        }
+        
+        .form-group input::placeholder,
+        .form-group select::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-secondary);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
-            color: white;
-            box-shadow: var(--shadow-medium);
+            background: var(--primary-default);
+            color: var(--text-on-primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-medium);
+            cursor: pointer;
+            font-size: var(--font-size-button);
+            font-weight: var(--font-weight-medium);
+            font-family: var(--font-family);
+            transition: all 0.3s ease;
+            line-height: 1;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hard);
+            background: var(--primary-dark);
         }
 
         .btn-secondary {
-            background: var(--neutral-600);
-            color: white;
+            background: var(--neutral-300);
+            color: var(--text-primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-medium);
+            cursor: pointer;
+            font-size: var(--font-size-button);
+            font-weight: var(--font-weight-medium);
+            font-family: var(--font-family);
+            transition: all 0.3s ease;
+            line-height: 1;
         }
 
         .btn-secondary:hover {
-            background: var(--neutral-700);
-            transform: translateY(-2px);
+            background: var(--neutral-400);
         }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--status-success), #66BB6A);
-            color: white;
-            box-shadow: var(--shadow-medium);
-        }
-
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hard);
-        }
-
+        
         .btn-outline {
             background: transparent;
             color: var(--text-secondary);
-            border: 2px solid var(--neutral-400);
+            border: 1px solid var(--neutral-400);
+            padding: 10px 20px;
+            border-radius: var(--radius-medium);
+            cursor: pointer;
+            font-size: var(--font-size-button);
+            font-weight: var(--font-weight-medium);
+            font-family: var(--font-family);
+            transition: all 0.3s ease;
+            line-height: 1;
         }
-
+        
         .btn-outline:hover {
             background: var(--neutral-300);
-            border-color: var(--neutral-500);
+            color: var(--text-primary);
         }
 
-        /* Result message mejorado */
-        .result-message {
-            margin-top: var(--spacing-lg);
-            padding: var(--spacing-lg);
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--neutral-100);
+            border-radius: var(--radius-large);
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--neutral-300);
+        }
+
+        .data-table th {
+            background: var(--primary-default);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-on-primary);
+            font-size: var(--font-size-body-medium);
+        }
+
+        .data-table tr:hover {
+            background: var(--neutral-200);
+        }
+
+        .search-container {
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--neutral-400);
             border-radius: var(--radius-medium);
-            font-weight: 500;
+            font-size: var(--font-size-body-medium);
+            background: var(--neutral-200);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-default);
+            box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.1);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--neutral-100);
+            border: 1px solid var(--neutral-400);
+            border-radius: var(--radius-medium);
+            box-shadow: var(--shadow-medium);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            padding: var(--spacing-sm) var(--spacing-md);
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid var(--neutral-300);
+        }
+
+        .dropdown-item:hover {
+            background: var(--neutral-200);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .loading {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: var(--spacing-lg);
+            font-size: var(--font-size-body-medium);
+        }
+
+        .error {
+            color: var(--status-error);
+            text-align: center;
+            padding: var(--spacing-lg);
+            background: rgba(244, 67, 54, 0.1);
+            border-radius: var(--radius-medium);
+            margin: var(--spacing-lg) 0;
+            font-size: var(--font-size-body-medium);
+        }
+
+        .success {
+            color: var(--status-success);
+            text-align: center;
+            padding: var(--spacing-lg);
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: var(--radius-medium);
+            margin: var(--spacing-lg) 0;
+            font-size: var(--font-size-body-medium);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
+        }
+
+        .pagination button {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid var(--neutral-400);
+            background: var(--neutral-100);
+            color: var(--text-primary);
+            cursor: pointer;
+            border-radius: var(--radius-small);
+            transition: all 0.3s ease;
+            font-family: var(--font-family);
+            font-size: var(--font-size-body-small);
+        }
+
+        .pagination button:hover {
+            background: var(--neutral-200);
+        }
+
+        .pagination button.active {
+            background: var(--primary-default);
+            color: var(--text-on-primary);
+            border-color: var(--primary-default);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .filters {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+
+        .filter-group label {
+            font-size: var(--font-size-body-small);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .filter-group select {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid var(--neutral-400);
+            border-radius: var(--radius-small);
+            background: var(--neutral-100);
+            color: var(--text-primary);
+            font-size: var(--font-size-body-medium);
+            font-family: var(--font-family);
+        }
+
+        .status-badge {
+            padding: var(--spacing-xxs) var(--spacing-xs);
+            border-radius: var(--radius-pill);
+            font-size: var(--font-size-caption);
+            font-weight: var(--font-weight-medium);
+            text-transform: uppercase;
+        }
+
+        .status-badge.pending { 
+            background: rgba(255, 193, 7, 0.2); 
+            color: var(--status-warning); 
+        }
+        .status-badge.confirmed { 
+            background: rgba(33, 150, 243, 0.2); 
+            color: var(--status-info); 
+        }
+        .status-badge.delivered { 
+            background: rgba(76, 175, 80, 0.2); 
+            color: var(--status-success); 
+        }
+
+        /* Form Steps Styles */
+        .form-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: var(--spacing-xl);
+            background: var(--neutral-100);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .step {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-pill);
+            color: var(--text-secondary);
+            font-weight: var(--font-weight-medium);
+            transition: all 0.3s ease;
         }
 
-        .result-message.success {
-            background: rgba(76, 175, 80, 0.1);
+        .step.active {
+            background: var(--primary-default);
+            color: var(--text-on-primary);
+        }
+
+        .step.completed {
+            background: var(--status-success);
+            color: var(--text-on-primary);
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--neutral-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-body-small);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .step.active .step-number {
+            background: var(--text-on-primary);
+            color: var(--primary-default);
+        }
+
+        .step.completed .step-number {
+            background: var(--text-on-primary);
             color: var(--status-success);
-            border: 2px solid rgba(76, 175, 80, 0.3);
         }
 
-        .result-message.error {
-            background: rgba(244, 67, 54, 0.1);
-            color: var(--status-error);
-            border: 2px solid rgba(244, 67, 54, 0.3);
+        .step-connector {
+            width: 40px;
+            height: 2px;
+            background: var(--neutral-300);
+            margin: 0 var(--spacing-sm);
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
+        .step.completed + .step-connector {
+            background: var(--status-success);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--neutral-300);
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-default);
+            border-radius: var(--radius-pill);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: var(--spacing-xs);
+            font-size: var(--font-size-body-small);
+            color: var(--text-secondary);
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--neutral-300);
+        }
+
+        .form-summary {
+            background: var(--neutral-200);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-medium);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-summary h3 {
+            font-size: var(--font-size-h3);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--spacing-xs) 0;
+            border-bottom: 1px solid var(--neutral-300);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            font-size: var(--font-size-body-medium);
+        }
+
+        .summary-value {
+            color: var(--text-primary);
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-body-medium);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
             .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
+                width: 100%;
+                padding: var(--spacing-md);
             }
 
             .main-content {
-                margin-left: 0;
+                padding: var(--spacing-lg);
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
             }
 
             .form-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        @media (max-width: 768px) {
-            .wizard-progress {
-                flex-wrap: wrap;
+            .filters {
+                flex-direction: column;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: var(--spacing-sm);
+            }
+
+            .form-steps {
+                flex-direction: column;
                 gap: var(--spacing-sm);
             }
 
-            .wizard-progress::before {
+            .step-connector {
                 display: none;
             }
 
-            .step {
-                min-width: 80px;
-            }
-
-            .step-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-            }
-
-            .wizard-navigation {
+            .form-actions {
                 flex-direction: column;
-                gap: var(--spacing-md);
-            }
-
-            .wizard-navigation button {
-                width: 100%;
-            }
-
-            .summary-content {
-                grid-template-columns: 1fr;
             }
         }
 
-        /* Loading animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: var(--font-size-h2);
+            }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+            .card-value {
+                font-size: var(--font-size-h2);
+            }
 
-        /* Floating action button */
-        .fab {
-            position: fixed;
-            bottom: var(--spacing-xl);
-            right: var(--spacing-xl);
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-default), var(--primary-light));
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: var(--shadow-hard);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .fab:hover {
-            transform: scale(1.1);
-            box-shadow: var(--shadow-glow);
+            .btn-primary,
+            .btn-secondary {
+                padding: var(--spacing-xs) var(--spacing-md);
+                font-size: var(--font-size-body-small);
+            }
         }
     </style>
 </head>
 <body>
+    <div class="connection-status" id="connectionStatus">🔄 Conectando...</div>
+    
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <span>GoManage</span>
+                <i class="fas fa-chart-line"></i>
+                GoManage
             </div>
-
+            
             <div class="nav-section">
-                <div class="nav-title">Gestión</div>
-                <div class="nav-item" data-section="customers">
-                    <span><i class="fas fa-users"></i> Clientes</span>
+                <h3>PRINCIPAL</h3>
+                <div class="nav-item active" onclick="showSection('dashboard')">
+                    <span><i class="fas fa-home"></i> Dashboard</span>
                     <span class="badge">1</span>
                 </div>
-                <div class="nav-item active" data-section="create-customer">
-                    <span><i class="fas fa-user-plus"></i> Alta de Clientes</span>
-                </div>
-                <div class="nav-item" data-section="orders">
-                    <span><i class="fas fa-shopping-cart"></i> Pedidos</span>
+            </div>
+            
+            <div class="nav-section">
+                <h3>GESTIÓN</h3>
+                <div class="nav-item" onclick="showSection('customers')">
+                    <span><i class="fas fa-users"></i> Clientes</span>
                     <span class="badge">2</span>
                 </div>
-                <div class="nav-item" data-section="sales-orders">
-                    <span><i class="fas fa-clipboard-list"></i> Pedidos de Venta</span>
+                <div class="nav-item" onclick="showSection('customer-create')">
+                    <span><i class="fas fa-user-plus"></i> Alta de Clientes</span>
                     <span class="badge">3</span>
                 </div>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-title">Análisis</div>
-                <div class="nav-item" data-section="analytics">
-                    <span><i class="fas fa-chart-bar"></i> Análisis y Reportes</span>
+                <div class="nav-item" onclick="showSection('products')">
+                    <span><i class="fas fa-box"></i> Productos</span>
                     <span class="badge">4</span>
                 </div>
-                <div class="nav-item" data-section="advanced-orders">
-                    <span><i class="fas fa-cogs"></i> Gestión Avanzada</span>
+                <div class="nav-item" onclick="showSection('orders')">
+                    <span><i class="fas fa-shopping-cart"></i> Pedidos</span>
                     <span class="badge">5</span>
                 </div>
-                <div class="nav-item" data-section="chat-mcp">
-                    <span><i class="fas fa-robot"></i> Chat MCP</span>
+                <div class="nav-item" onclick="showSection('sales-orders')">
+                    <span><i class="fas fa-file-invoice"></i> Pedidos de Venta</span>
                     <span class="badge">6</span>
                 </div>
+                <div class="nav-item" onclick="showSection('advanced-orders')">
+                    <span><i class="fas fa-cogs"></i> Gestión Avanzada</span>
+                    <span class="badge">7</span>
+                </div>
             </div>
-
-            <div class="connection-status connected" id="connectionStatus">
-                <i class="fas fa-wifi"></i> Conectado
+            
+            <div class="nav-section">
+                <h3>ANÁLISIS</h3>
+                <div class="nav-item" onclick="showSection('analytics')">
+                    <span><i class="fas fa-chart-bar"></i> Análisis</span>
+                    <span class="badge">8</span>
+                </div>
+                <div class="nav-item" onclick="showSection('chat-mcp')">
+                    <span><i class="fas fa-robot"></i> Chat MCP</span>
+                    <span class="badge">9</span>
+                </div>
+                <div class="nav-item" onclick="showSection('mejoras')">
+                    <span><i class="fas fa-lightbulb"></i> Mejoras</span>
+                    <span class="badge">10</span>
+                </div>
             </div>
         </div>
-
+        
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Create Customer Section -->
-            <div class="content-section active" id="create-customer">
+            <!-- Dashboard Section -->
+            <div class="content-section active" id="dashboard">
+                <div class="header">
+                    <h1><i class="fas fa-tachometer-alt"></i> Dashboard Ejecutivo</h1>
+                    <p>Resumen general de métricas de negocio y estado del sistema</p>
+                </div>
+                
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Total Clientes</div>
+                            <i class="fas fa-users" style="color: var(--primary-default);"></i>
+                        </div>
+                        <div class="card-value" id="total-customers">-</div>
+                        <div class="card-change positive">+5.2% vs mes anterior</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Total Productos</div>
+                            <i class="fas fa-box" style="color: var(--secondary-default);"></i>
+                        </div>
+                        <div class="card-value" id="total-products">-</div>
+                        <div class="card-change positive">+2.1% vs mes anterior</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Pedidos Activos</div>
+                            <i class="fas fa-shopping-cart" style="color: var(--status-warning);"></i>
+                        </div>
+                        <div class="card-value" id="active-orders">-</div>
+                        <div class="card-change negative">-1.3% vs mes anterior</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Facturación Mensual</div>
+                            <i class="fas fa-euro-sign" style="color: var(--status-info);"></i>
+                        </div>
+                        <div class="card-value" id="monthly-revenue">-</div>
+                        <div class="card-change positive">+8.7% vs mes anterior</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Create Section -->
+            <div class="content-section" id="customer-create">
                 <div class="header">
                     <h1><i class="fas fa-user-plus"></i> Alta de Clientes</h1>
-                    <p>Registro intuitivo de nuevos clientes en el sistema</p>
+                    <p>Crear nuevo cliente en el sistema GoManage</p>
                 </div>
-                
-                <!-- Progress Steps -->
-                <div class="wizard-progress">
-                    <div class="step active" data-step="1">
-                        <div class="step-icon">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="step-label">Datos Básicos</div>
+
+                <!-- Form Steps -->
+                <div class="form-steps">
+                    <div class="step active" id="step-1">
+                        <div class="step-number">1</div>
+                        <span>Datos Básicos</span>
                     </div>
-                    <div class="step" data-step="2">
-                        <div class="step-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="step-label">Dirección</div>
+                    <div class="step-connector"></div>
+                    <div class="step" id="step-2">
+                        <div class="step-number">2</div>
+                        <span>Información Comercial</span>
                     </div>
-                    <div class="step" data-step="3">
-                        <div class="step-icon">
-                            <i class="fas fa-briefcase"></i>
-                        </div>
-                        <div class="step-label">Comercial</div>
-                    </div>
-                    <div class="step" data-step="4">
-                        <div class="step-icon">
-                            <i class="fas fa-cog"></i>
-                        </div>
-                        <div class="step-label">Configuración</div>
+                    <div class="step-connector"></div>
+                    <div class="step" id="step-3">
+                        <div class="step-number">3</div>
+                        <span>Confirmación</span>
                     </div>
                 </div>
 
-                <form id="createCustomerForm" class="wizard-form">
-                    <!-- Step 1: Datos Básicos -->
-                    <div class="wizard-step active" data-step="1">
-                        <div class="step-header">
-                            <h2><i class="fas fa-user"></i> Información Básica del Cliente</h2>
-                            <p>Datos principales para identificar al cliente en el sistema</p>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group required">
-                                <label for="vat_number">
-                                    <span class="label-icon"><i class="fas fa-id-card"></i></span>
-                                    CIF/NIF
-                                    <span class="tooltip" title="Número de identificación fiscal"><i class="fas fa-info-circle"></i></span>
-                                </label>
-                                <input type="text" 
-                                       id="vat_number" 
-                                       name="vat_number" 
-                                       placeholder="Ej: B12345678 o 12345678Z"
-                                       autocomplete="off"
-                                       autocapitalize="off"
-                                       autocorrect="off"
-                                       spellcheck="false"
-                                       data-form-type="other"
-                                       required>
-                                <div class="field-status"></div>
-                                <div class="field-hint">Se autocompletará el nombre comercial automáticamente</div>
-                            </div>
-                            
-                            <div class="form-group required">
-                                <label for="business_name">
-                                    <span class="label-icon"><i class="fas fa-building"></i></span>
-                                    Nombre Comercial
-                                    <span class="tooltip" title="Nombre que aparecerá en facturas y documentos"><i class="fas fa-info-circle"></i></span>
-                                </label>
-                                <input type="text" 
-                                       id="business_name" 
-                                       name="business_name" 
-                                       placeholder="Ej: ACME Distribuciones S.L."
-                                       autocomplete="off"
-                                       autocapitalize="off"
-                                       autocorrect="off"
-                                       spellcheck="false"
-                                       data-form-type="other"
-                                       required>
-                                <div class="field-status"></div>
-                            </div>
-                            
-                            <div class="form-group required">
-                                <label for="name">
-                                    <span class="label-icon"><i class="fas fa-tag"></i></span>
-                                    Nombre Corto
-                                    <span class="tooltip" title="Nombre corto para uso interno"><i class="fas fa-info-circle"></i></span>
-                                </label>
-                                <input type="text" 
-                                       id="name" 
-                                       name="name" 
-                                       placeholder="Ej: ACME"
-                                       autocomplete="off"
-                                       autocapitalize="off"
-                                       autocorrect="off"
-                                       spellcheck="false"
-                                       data-form-type="other"
-                                       required>
-                                <div class="field-status"></div>
-                            </div>
-                        </div>
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 33%;"></div>
                     </div>
+                    <div class="progress-text" id="progressText">Paso 1 de 3 - Datos Básicos</div>
+                </div>
 
-                    <!-- Step 2: Dirección -->
-                    <div class="wizard-step" data-step="2">
-                        <div class="step-header">
-                            <h2><i class="fas fa-map-marker-alt"></i> Dirección y Ubicación</h2>
-                            <p>Información de contacto y localización del cliente</p>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group full-width">
-                                <label for="street_name">
-                                    <span class="label-icon"><i class="fas fa-road"></i></span>
-                                    Dirección Completa
-                                </label>
-                                <input type="text" 
-                                       id="street_name" 
-                                       name="street_name" 
-                                       placeholder="Ej: Calle Mayor, 123, 2º B"
-                                       autocomplete="off">
-                                <div class="field-status"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="city">
-                                    <span class="label-icon"><i class="fas fa-city"></i></span>
-                                    Ciudad
-                                </label>
-                                <input type="text" 
-                                       id="city" 
-                                       name="city" 
-                                       placeholder="Ej: Madrid"
-                                       autocomplete="off">
-                                <div class="field-status"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="postal_code">
-                                    <span class="label-icon"><i class="fas fa-mail-bulk"></i></span>
-                                    Código Postal
-                                </label>
-                                <input type="text" 
-                                       id="postal_code" 
-                                       name="postal_code" 
-                                       placeholder="Ej: 28001"
-                                       autocomplete="off">
-                                <div class="field-status"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="province_id">
-                                    <span class="label-icon"><i class="fas fa-map"></i></span>
-                                    Provincia
-                                </label>
-                                <select id="province_id" name="province_id">
-                                    <option value="">Seleccionar provincia...</option>
-                                    <option value="01">Álava</option>
-                                    <option value="02">Albacete</option>
-                                    <option value="03">Alicante</option>
-                                    <option value="04">Almería</option>
-                                    <option value="05">Ávila</option>
-                                    <option value="06">Badajoz</option>
-                                    <option value="07">Baleares</option>
-                                    <option value="08">Barcelona</option>
-                                    <option value="09">Burgos</option>
-                                    <option value="10">Cáceres</option>
-                                    <option value="11">Cádiz</option>
-                                    <option value="12">Castellón</option>
-                                    <option value="13">Ciudad Real</option>
-                                    <option value="14">Córdoba</option>
-                                    <option value="15">La Coruña</option>
-                                    <option value="16">Cuenca</option>
-                                    <option value="17">Girona</option>
-                                    <option value="18">Granada</option>
-                                    <option value="19">Guadalajara</option>
-                                    <option value="20">Guipúzcoa</option>
-                                    <option value="21">Huelva</option>
-                                    <option value="22">Huesca</option>
-                                    <option value="23">Jaén</option>
-                                    <option value="24">León</option>
-                                    <option value="25">Lleida</option>
-                                    <option value="26">La Rioja</option>
-                                    <option value="27">Lugo</option>
-                                    <option value="28">Madrid</option>
-                                    <option value="29">Málaga</option>
-                                    <option value="30">Murcia</option>
-                                    <option value="31">Navarra</option>
-                                    <option value="32">Orense</option>
-                                    <option value="33">Asturias</option>
-                                    <option value="34">Palencia</option>
-                                    <option value="35">Las Palmas</option>
-                                    <option value="36">Pontevedra</option>
-                                    <option value="37">Salamanca</option>
-                                    <option value="38">Santa Cruz de Tenerife</option>
-                                    <option value="39">Cantabria</option>
-                                    <option value="40">Segovia</option>
-                                    <option value="41">Sevilla</option>
-                                    <option value="42">Soria</option>
-                                    <option value="43">Tarragona</option>
-                                    <option value="44">Teruel</option>
-                                    <option value="45">Toledo</option>
-                                    <option value="46">Valencia</option>
-                                    <option value="47">Valladolid</option>
-                                    <option value="48">Vizcaya</option>
-                                    <option value="49">Zamora</option>
-                                    <option value="50">Zaragoza</option>
-                                    <option value="51">Ceuta</option>
-                                    <option value="52">Melilla</option>
-                                </select>
-                                <div class="field-status"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Configuración Comercial -->
-                    <div class="wizard-step" data-step="3">
-                        <div class="step-header">
-                            <h2><i class="fas fa-briefcase"></i> Configuración Comercial</h2>
-                            <p>Condiciones de pago y clasificación del cliente</p>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="payment_method_id">
-                                    <span class="label-icon"><i class="fas fa-credit-card"></i></span>
-                                    Método de Pago
-                                </label>
-                                <select id="payment_method_id" name="payment_method_id">
-                                    <option value="">Seleccionar método...</option>
-                                    <option value="001">Contado</option>
-                                    <option value="002">Reposición</option>
-                                    <option value="003">Contado Proforma</option>
-                                    <option value="004">Transferencia 30</option>
-                                    <option value="005">Transferencia 60</option>
-                                    <option value="006">Transfe.Proforma</option>
-                                    <option value="007" selected>Transferencia</option>
-                                    <option value="008">Transferencia 90 día</option>
-                                    <option value="009">Transferencia 85 día</option>
-                                    <option value="015">Transferencia 15</option>
-                                    <option value="020">Recibo 30 días</option>
-                                    <option value="021">Recibo 60 días</option>
-                                    <option value="029">Giro 15 días</option>
-                                    <option value="030">Giro 30 días</option>
-                                    <option value="031">Giro 60 días</option>
-                                    <option value="032">Giro 45 días</option>
-                                    <option value="033">Giro 90 días</option>
-                                    <option value="034">Giro 30/60 días</option>
-                                    <option value="035">Giro 30/60/90 días</option>
-                                    <option value="036">Giro 60/90 días</option>
-                                    <option value="039">Pagaré 30/60 días</option>
-                                    <option value="040">Pagaré 60 días</option>
-                                    <option value="041">Confirming 90 días</option>
-                                    <option value="042">Confirming 60 días</option>
-                                    <option value="055">Giro 7 días</option>
-                                    <option value="096">Tarjeta</option>
-                                    <option value="097">Klarna</option>
-                                    <option value="098">Bizum</option>
-                                    <option value="099">PayPal</option>
-                                    <option value="999">Contado</option>
-                                </select>
-                                <div class="field-status"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="tip_cli">
-                                    <span class="label-icon"><i class="fas fa-star"></i></span>
-                                    Tipo de Cliente
-                                </label>
-                                <select id="tip_cli" name="tip_cli">
-                                    <option value="">Seleccionar tipo...</option>
-                                    <option value="1">VIP</option>
-                                    <option value="2">Almacén</option>
-                                    <option value="3" selected>Profesional</option>
-                                </select>
-                                <div class="field-status"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 4: Opciones -->
-                    <div class="wizard-step" data-step="4">
-                        <div class="step-header">
-                            <h2><i class="fas fa-cog"></i> Opciones y Configuración</h2>
-                            <p>Preferencias adicionales y configuración final del cliente</p>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group checkbox-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="send_invoices" name="send_invoices">
-                                    <span class="checkmark"></span>
-                                    <span class="label-icon"><i class="fas fa-envelope"></i></span>
-                                    Enviar facturas por email
-                                </label>
-                            </div>
-                            
-                            <div class="form-group checkbox-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="send_newsletter" name="send_newsletter">
-                                    <span class="checkmark"></span>
-                                    <span class="label-icon"><i class="fas fa-newspaper"></i></span>
-                                    Enviar newsletter
-                                </label>
-                            </div>
-                            
-                            <div class="form-group checkbox-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="is_public_administration" name="is_public_administration">
-                                    <span class="checkmark"></span>
-                                    <span class="label-icon"><i class="fas fa-university"></i></span>
-                                    Administración pública
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <!-- Resumen final -->
-                        <div class="customer-summary">
-                            <h3><i class="fas fa-clipboard-check"></i> Resumen del Cliente</h3>
-                            <div class="summary-content">
-                                <div class="summary-item">
-                                    <strong>Empresa</strong>
-                                    <span id="summary-name">-</span>
+                <!-- Customer Form -->
+                <div class="form-container">
+                    <form id="customerForm">
+                        <!-- Step 1: Basic Data -->
+                        <div class="form-step active" id="form-step-1">
+                            <h2 style="margin-bottom: var(--spacing-lg); color: var(--text-primary);">Datos Básicos del Cliente</h2>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="business_name">Razón Social *</label>
+                                    <input type="text" id="business_name" name="business_name" required 
+                                           placeholder="Ej: ACME Distribuciones S.L.">
                                 </div>
-                                <div class="summary-item">
-                                    <strong>CIF/NIF</strong>
-                                    <span id="summary-vat">-</span>
+                                
+                                <div class="form-group">
+                                    <label for="name">Nombre Comercial</label>
+                                    <input type="text" id="name" name="name" 
+                                           placeholder="Ej: ACME Store">
                                 </div>
-                                <div class="summary-item">
-                                    <strong>Tipo</strong>
-                                    <span id="summary-type">-</span>
+                                
+                                <div class="form-group">
+                                    <label for="vat_number">CIF/NIF *</label>
+                                    <input type="text" id="vat_number" name="vat_number" required 
+                                           placeholder="Ej: B12345678">
                                 </div>
-                                <div class="summary-item">
-                                    <strong>Pago</strong>
-                                    <span id="summary-payment">-</span>
+                                
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" 
+                                           placeholder="contacto@empresa.com">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="phone">Teléfono</label>
+                                    <input type="tel" id="phone" name="phone" 
+                                           placeholder="912345678">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="mobile_phone">Móvil</label>
+                                    <input type="tel" id="mobile_phone" name="mobile_phone" 
+                                           placeholder="612345678">
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Navigation Buttons -->
-                    <div class="wizard-navigation">
-                        <button type="button" class="btn-secondary" id="prevStep" style="display: none;">
-                            <i class="fas fa-arrow-left"></i> Anterior
-                        </button>
-                        <button type="button" class="btn-primary" id="nextStep">
-                            Siguiente <i class="fas fa-arrow-right"></i>
-                        </button>
-                        <button type="submit" class="btn-success" id="submitForm" style="display: none;">
-                            <i class="fas fa-check"></i> Crear Cliente
-                        </button>
-                        <button type="button" class="btn-outline" id="clearForm">
-                            <i class="fas fa-redo"></i> Limpiar Todo
-                        </button>
-                    </div>
-                </form>
+                        <!-- Step 2: Commercial Info -->
+                        <div class="form-step" id="form-step-2">
+                            <h2 style="margin-bottom: var(--spacing-lg); color: var(--text-primary);">Información Comercial</h2>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="street_name">Dirección</label>
+                                    <input type="text" id="street_name" name="street_name" 
+                                           placeholder="Calle Principal, 123">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="postal_code">Código Postal</label>
+                                    <input type="text" id="postal_code" name="postal_code" 
+                                           placeholder="28001">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="city">Ciudad</label>
+                                    <input type="text" id="city" name="city" 
+                                           placeholder="Madrid">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="province_id">Provincia</label>
+                                    <select id="province_id" name="province_id">
+                                        <option value="">Seleccionar provincia</option>
+                                        <option value="1">Álava</option>
+                                        <option value="2">Albacete</option>
+                                        <option value="3">Alicante</option>
+                                        <option value="4">Almería</option>
+                                        <option value="5">Ávila</option>
+                                        <option value="6">Badajoz</option>
+                                        <option value="7">Baleares</option>
+                                        <option value="8">Barcelona</option>
+                                        <option value="9">Burgos</option>
+                                        <option value="10">Cáceres</option>
+                                        <option value="11">Cádiz</option>
+                                        <option value="12">Castellón</option>
+                                        <option value="13">Ciudad Real</option>
+                                        <option value="14">Córdoba</option>
+                                        <option value="15">Coruña</option>
+                                        <option value="16">Cuenca</option>
+                                        <option value="17">Girona</option>
+                                        <option value="18">Granada</option>
+                                        <option value="19">Guadalajara</option>
+                                        <option value="20">Guipúzcoa</option>
+                                        <option value="21">Huelva</option>
+                                        <option value="22">Huesca</option>
+                                        <option value="23">Jaén</option>
+                                        <option value="24">León</option>
+                                        <option value="25">Lleida</option>
+                                        <option value="26">Rioja</option>
+                                        <option value="27">Lugo</option>
+                                        <option value="28">Madrid</option>
+                                        <option value="29">Málaga</option>
+                                        <option value="30">Murcia</option>
+                                        <option value="31">Navarra</option>
+                                        <option value="32">Ourense</option>
+                                        <option value="33">Asturias</option>
+                                        <option value="34">Palencia</option>
+                                        <option value="35">Palmas</option>
+                                        <option value="36">Pontevedra</option>
+                                        <option value="37">Salamanca</option>
+                                        <option value="38">Santa Cruz de Tenerife</option>
+                                        <option value="39">Cantabria</option>
+                                        <option value="40">Segovia</option>
+                                        <option value="41">Sevilla</option>
+                                        <option value="42">Soria</option>
+                                        <option value="43">Tarragona</option>
+                                        <option value="44">Teruel</option>
+                                        <option value="45">Toledo</option>
+                                        <option value="46">Valencia</option>
+                                        <option value="47">Valladolid</option>
+                                        <option value="48">Vizcaya</option>
+                                        <option value="49">Zamora</option>
+                                        <option value="50">Zaragoza</option>
+                                        <option value="51">Ceuta</option>
+                                        <option value="52">Melilla</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="payment_method_id">Forma de Pago</label>
+                                    <select id="payment_method_id" name="payment_method_id">
+                                        <option value="">Seleccionar forma de pago</option>
+                                        <option value="1">Contado</option>
+                                        <option value="2">Transferencia</option>
+                                        <option value="3">Tarjeta</option>
+                                        <option value="4">Cheque</option>
+                                        <option value="5">Pagaré</option>
+                                        <option value="6">Domiciliación</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="discount_id">Tipo de Descuento</label>
+                                    <select id="discount_id" name="discount_id">
+                                        <option value="">Sin descuento</option>
+                                        <option value="1">VIP (10%)</option>
+                                        <option value="2">Almacén (5%)</option>
+                                        <option value="3">Profesional (15%)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Confirmation -->
+                        <div class="form-step" id="form-step-3">
+                            <h2 style="margin-bottom: var(--spacing-lg); color: var(--text-primary);">Confirmación de Datos</h2>
+                            <div class="form-summary" id="formSummary">
+                                <h3>Resumen del Cliente</h3>
+                                <div id="summaryContent">
+                                    <!-- Dynamic summary content -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">
+                                <i class="fas fa-arrow-left"></i> Anterior
+                            </button>
+                            <div style="flex: 1;"></div>
+                            <button type="button" class="btn-outline" onclick="clearForm()">
+                                <i class="fas fa-times"></i> Limpiar
+                            </button>
+                            <button type="button" class="btn-primary" id="nextBtn" onclick="nextStep()">
+                                Siguiente <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <button type="submit" class="btn-primary" id="submitBtn" style="display: none;">
+                                <i class="fas fa-save"></i> Crear Cliente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Other sections would go here -->
+            <!-- Customers Section -->
+            <div class="content-section" id="customers">
+                <div class="header">
+                    <h1><i class="fas fa-users"></i> Gestión de Clientes</h1>
+                    <p>Lista completa de clientes registrados en el sistema</p>
+                </div>
                 
-                <div id="createCustomerResult" class="result-message" style="display: none;"></div>
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Buscar clientes por nombre, CIF, ciudad..." id="customer-search">
+                    <div class="dropdown" id="customer-dropdown" style="display: none;"></div>
+                </div>
+                
+                <div id="customers-container">
+                    <div class="loading">Cargando clientes...</div>
+                </div>
+            </div>
+
+            <!-- Products Section -->
+            <div class="content-section" id="products">
+                <div class="header">
+                    <h1><i class="fas fa-box"></i> Catálogo de Productos</h1>
+                    <p>Gestión completa del inventario y catálogo de productos</p>
+                </div>
+                
+                <div id="products-container">
+                    <div class="loading">Cargando productos...</div>
+                </div>
+            </div>
+
+            <!-- Orders Section -->
+            <div class="content-section" id="orders">
+                <div class="header">
+                    <h1><i class="fas fa-shopping-cart"></i> Creación de Pedidos</h1>
+                    <p>Sistema completo para crear y gestionar pedidos de clientes</p>
+                </div>
+                
+                <div id="orders-container">
+                    <div class="loading">Cargando sistema de pedidos...</div>
+                </div>
+            </div>
+
+            <!-- Sales Orders Section -->
+            <div class="content-section" id="sales-orders">
+                <div class="header">
+                    <h1><i class="fas fa-file-invoice"></i> Pedidos de Venta</h1>
+                    <p>Gestión y seguimiento de todos los pedidos de venta</p>
+                </div>
+                
+                <div id="sales-orders-container">
+                    <div class="loading">Cargando pedidos de venta...</div>
+                </div>
+            </div>
+
+            <!-- Advanced Orders Section -->
+            <div class="content-section" id="advanced-orders">
+                <div class="header">
+                    <h1><i class="fas fa-cogs"></i> Gestión Avanzada de Pedidos</h1>
+                    <p>Sistema completo de seguimiento y gestión del ciclo de vida de pedidos</p>
+                </div>
+                
+                <div id="advanced-orders-container">
+                    <div class="loading">Cargando gestión avanzada...</div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="content-section" id="analytics">
+                <div class="header">
+                    <h1><i class="fas fa-chart-bar"></i> Análisis y Reportes</h1>
+                    <p>Dashboard avanzado con métricas y análisis en tiempo real</p>
+                </div>
+                
+                <div id="analytics-container">
+                    <div class="loading">Cargando análisis...</div>
+                </div>
+            </div>
+
+            <!-- Chat MCP Section -->
+            <div class="content-section" id="chat-mcp">
+                <div class="header">
+                    <h1><i class="fas fa-robot"></i> Chat MCP - Asistente Inteligente</h1>
+                    <p>Consulte datos del sistema y genere documentos con nuestro asistente IA</p>
+                </div>
+                
+                <div id="chat-mcp-container">
+                    <div class="loading">Cargando asistente MCP...</div>
+                </div>
+            </div>
+
+            <!-- Mejoras Section -->
+            <div class="content-section" id="mejoras">
+                <div class="header">
+                    <h1><i class="fas fa-lightbulb"></i> Análisis y Mejoras</h1>
+                    <p>Recomendaciones inteligentes para optimizar el negocio</p>
+                </div>
+                
+                <div id="mejoras-container">
+                    <div class="loading">Cargando análisis de mejoras...</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Floating Action Button -->
-    <button class="fab" title="Ayuda">
-        <i class="fas fa-question"></i>
-    </button>
-
     <script>
-        // Variables globales
+        // Global variables
         let currentStep = 1;
-        const totalSteps = 4;
+        let totalSteps = 3;
+        let isAuthenticated = false;
 
-        // Inicialización
+        // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
-            initializeWizard();
-            setupEventListeners();
-            updateSummary();
+            authenticateWithGoManage();
+            setupFormValidation();
         });
 
-        function initializeWizard() {
-            updateStepDisplay();
-            updateNavigationButtons();
-        }
-
-        function setupEventListeners() {
-            // Navegación
-            document.getElementById('nextStep').addEventListener('click', nextStep);
-            document.getElementById('prevStep').addEventListener('click', prevStep);
-            document.getElementById('clearForm').addEventListener('click', clearForm);
-            document.getElementById('submitForm').addEventListener('click', submitForm);
-
-            // Auto-completado del CIF - autocompletar nombre comercial
-            document.getElementById('vat_number').addEventListener('input', function() {
-                const vat = this.value.trim().toUpperCase();
-                this.value = vat; // Convertir a mayúsculas automáticamente
+        // Authentication
+        async function authenticateWithGoManage() {
+            try {
+                updateConnectionStatus('connecting');
                 
-                if (vat.length >= 8) {
-                    // Autocompletar nombre comercial basado en CIF
-                    const businessNameField = document.getElementById('business_name');
-                    if (!businessNameField.value || businessNameField.value === vat) {
-                        businessNameField.value = vat;
-                    }
-                    updateFieldStatus('vat_number', 'valid');
-                } else {
-                    updateFieldStatus('vat_number', 'invalid');
-                }
-                updateSummary();
-            });
-
-            // Actualizar resumen en tiempo real
-            const formInputs = document.querySelectorAll('#createCustomerForm input, #createCustomerForm select');
-            formInputs.forEach(input => {
-                input.addEventListener('change', updateSummary);
-                input.addEventListener('input', updateSummary);
-            });
-
-            // Navegación del sidebar
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const section = this.dataset.section;
-                    if (section) {
-                        switchSection(section);
+                const response = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 });
-            });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    isAuthenticated = true;
+                    updateConnectionStatus('connected');
+                    loadDashboardData();
+                } else {
+                    updateConnectionStatus('disconnected');
+                }
+                
+            } catch (error) {
+                console.error('Error de autenticación:', error);
+                updateConnectionStatus('disconnected');
+            }
         }
 
+        function updateConnectionStatus(status) {
+            const statusElement = document.getElementById('connectionStatus');
+            
+            switch(status) {
+                case 'connecting':
+                    statusElement.textContent = '🔄 Conectando...';
+                    statusElement.className = 'connection-status';
+                    break;
+                case 'connected':
+                    statusElement.textContent = '✅ Conectado';
+                    statusElement.className = 'connection-status connected';
+                    break;
+                case 'disconnected':
+                    statusElement.textContent = '❌ Desconectado';
+                    statusElement.className = 'connection-status disconnected';
+                    break;
+            }
+        }
+
+        // Dashboard data loading
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/analytics/dashboard');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    document.getElementById('total-customers').textContent = data.data.customers.total.toLocaleString();
+                    document.getElementById('total-products').textContent = '1,247'; // Sample data
+                    document.getElementById('active-orders').textContent = '89'; // Sample data
+                    document.getElementById('monthly-revenue').textContent = '€45,678'; // Sample data
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        // Form Steps Management
         function nextStep() {
-            if (validateCurrentStep()) {
-                if (currentStep < totalSteps) {
+            if (currentStep < totalSteps) {
+                if (validateCurrentStep()) {
                     currentStep++;
-                    updateStepDisplay();
-                    updateNavigationButtons();
-                    markStepCompleted(currentStep - 1);
+                    updateFormStep();
                 }
             }
         }
 
-        function prevStep() {
+        function previousStep() {
             if (currentStep > 1) {
                 currentStep--;
-                updateStepDisplay();
-                updateNavigationButtons();
+                updateFormStep();
             }
         }
 
-        function updateStepDisplay() {
-            // Ocultar todos los pasos
-            document.querySelectorAll('.wizard-step').forEach(step => {
-                step.classList.remove('active');
+        function updateFormStep() {
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                } else if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                }
             });
 
-            // Mostrar paso actual
-            document.querySelector(`.wizard-step[data-step="${currentStep}"]`).classList.add('active');
-
-            // Actualizar indicadores de progreso
-            document.querySelectorAll('.step').forEach((step, index) => {
+            // Update form steps
+            document.querySelectorAll('.form-step').forEach((step, index) => {
                 step.classList.remove('active');
                 if (index + 1 === currentStep) {
                     step.classList.add('active');
                 }
             });
-        }
 
-        function updateNavigationButtons() {
-            const prevBtn = document.getElementById('prevStep');
-            const nextBtn = document.getElementById('nextStep');
-            const submitBtn = document.getElementById('submitForm');
-
-            prevBtn.style.display = currentStep > 1 ? 'flex' : 'none';
+            // Update progress bar
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
             
-            if (currentStep === totalSteps) {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'flex';
-            } else {
-                nextBtn.style.display = 'flex';
-                submitBtn.style.display = 'none';
-            }
-        }
+            const stepTexts = [
+                'Paso 1 de 3 - Datos Básicos',
+                'Paso 2 de 3 - Información Comercial',
+                'Paso 3 de 3 - Confirmación'
+            ];
+            document.getElementById('progressText').textContent = stepTexts[currentStep - 1];
 
-        function markStepCompleted(stepNumber) {
-            const step = document.querySelector(`.step[data-step="${stepNumber}"]`);
-            if (step) {
-                step.classList.add('completed');
+            // Update buttons
+            document.getElementById('prevBtn').style.display = currentStep > 1 ? 'block' : 'none';
+            document.getElementById('nextBtn').style.display = currentStep < totalSteps ? 'block' : 'none';
+            document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'block' : 'none';
+
+            // Update summary if on last step
+            if (currentStep === totalSteps) {
+                updateFormSummary();
             }
         }
 
         function validateCurrentStep() {
-            const currentStepElement = document.querySelector(`.wizard-step[data-step="${currentStep}"]`);
-            const requiredFields = currentStepElement.querySelectorAll('input[required], select[required]');
+            const currentFormStep = document.getElementById(`form-step-${currentStep}`);
+            const requiredFields = currentFormStep.querySelectorAll('input[required], select[required]');
             
             let isValid = true;
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
-                    updateFieldStatus(field.id, 'invalid');
+                    field.style.borderColor = 'var(--status-error)';
                     isValid = false;
                 } else {
-                    updateFieldStatus(field.id, 'valid');
+                    field.style.borderColor = 'var(--neutral-400)';
                 }
             });
-
+            
+            if (!isValid) {
+                alert('Por favor, complete todos los campos obligatorios.');
+            }
+            
             return isValid;
         }
 
-        function updateFieldStatus(fieldId, status) {
-            const field = document.getElementById(fieldId);
-            const statusElement = field.parentElement.querySelector('.field-status');
+        function updateFormSummary() {
+            const form = document.getElementById('customerForm');
+            const formData = new FormData(form);
+            const summaryContent = document.getElementById('summaryContent');
             
-            if (status === 'valid') {
-                statusElement.innerHTML = '<i class="fas fa-check" style="color: var(--status-success);"></i>';
-                field.style.borderColor = 'var(--status-success)';
-            } else if (status === 'invalid') {
-                statusElement.innerHTML = '<i class="fas fa-times" style="color: var(--status-error);"></i>';
-                field.style.borderColor = 'var(--status-error)';
-            } else {
-                statusElement.innerHTML = '';
-                field.style.borderColor = 'var(--neutral-300)';
-            }
+            const summaryItems = [
+                { label: 'Razón Social', value: formData.get('business_name') },
+                { label: 'Nombre Comercial', value: formData.get('name') },
+                { label: 'CIF/NIF', value: formData.get('vat_number') },
+                { label: 'Email', value: formData.get('email') },
+                { label: 'Teléfono', value: formData.get('phone') },
+                { label: 'Dirección', value: formData.get('street_name') },
+                { label: 'Ciudad', value: formData.get('city') },
+                { label: 'Código Postal', value: formData.get('postal_code') }
+            ];
+            
+            summaryContent.innerHTML = summaryItems
+                .filter(item => item.value)
+                .map(item => `
+                    <div class="summary-item">
+                        <span class="summary-label">${item.label}:</span>
+                        <span class="summary-value">${item.value}</span>
+                    </div>
+                `).join('');
         }
 
-        function updateSummary() {
-            const businessName = document.getElementById('business_name').value || '-';
-            const vatNumber = document.getElementById('vat_number').value || '-';
-            const tipCli = document.getElementById('tip_cli');
-            const paymentMethod = document.getElementById('payment_method_id');
-
-            document.getElementById('summary-name').textContent = businessName;
-            document.getElementById('summary-vat').textContent = vatNumber;
-            document.getElementById('summary-type').textContent = tipCli.options[tipCli.selectedIndex]?.text || '-';
-            document.getElementById('summary-payment').textContent = paymentMethod.options[paymentMethod.selectedIndex]?.text || '-';
+        function setupFormValidation() {
+            const form = document.getElementById('customerForm');
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!isAuthenticated) {
+                    alert('Error: No hay conexión con GoManage. Intente reconectar.');
+                    return;
+                }
+                
+                const formData = new FormData(form);
+                const customerData = Object.fromEntries(formData.entries());
+                
+                // Set default values
+                customerData.country_id = 'ES';
+                customerData.currency_id = 'eur';
+                customerData.language_id = 'cas';
+                customerData.periodicity_id = '1';
+                
+                try {
+                    const response = await fetch('/api/customers', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(customerData)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        alert('✅ Cliente creado exitosamente');
+                        clearForm();
+                    } else {
+                        alert('❌ Error: ' + (result.error || result.message || 'Error desconocido'));
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('❌ Error de conexión al crear el cliente');
+                }
+            });
         }
 
         function clearForm() {
-            if (confirm('¿Está seguro de que desea limpiar todos los datos del formulario?')) {
-                document.getElementById('createCustomerForm').reset();
-                currentStep = 1;
-                updateStepDisplay();
-                updateNavigationButtons();
-                updateSummary();
-                
-                // Limpiar estados de validación
-                document.querySelectorAll('.field-status').forEach(status => {
-                    status.innerHTML = '';
-                });
-                document.querySelectorAll('input, select').forEach(field => {
-                    field.style.borderColor = 'var(--neutral-300)';
-                });
-                
-                // Limpiar pasos completados
-                document.querySelectorAll('.step').forEach(step => {
-                    step.classList.remove('completed');
+            document.getElementById('customerForm').reset();
+            currentStep = 1;
+            updateFormStep();
+        }
+
+        // Auto-fill name from business_name
+        document.addEventListener('DOMContentLoaded', function() {
+            const businessNameInput = document.getElementById('business_name');
+            const nameInput = document.getElementById('name');
+            
+            if (businessNameInput && nameInput) {
+                businessNameInput.addEventListener('input', function() {
+                    if (!nameInput.value) {
+                        nameInput.value = this.value;
+                    }
                 });
             }
-        }
-
-        function submitForm(e) {
-            e.preventDefault();
-            
-            if (!validateCurrentStep()) {
-                return;
-            }
-
-            const submitBtn = document.getElementById('submitForm');
-            const originalText = submitBtn.innerHTML;
-            
-            // Mostrar loading
-            submitBtn.innerHTML = '<span class="loading"></span> Creando...';
-            submitBtn.disabled = true;
-
-            // Recopilar datos del formulario
-            const formData = {
-                business_name: document.getElementById('business_name').value,
-                name: document.getElementById('name').value,
-                vat_number: document.getElementById('vat_number').value,
-                city: document.getElementById('city').value,
-                street_name: document.getElementById('street_name').value,
-                postal_code: document.getElementById('postal_code').value,
-                province_id: document.getElementById('province_id').value,
-                payment_method_id: document.getElementById('payment_method_id').value,
-                tip_cli: document.getElementById('tip_cli').value,
-                send_invoices: document.getElementById('send_invoices').checked,
-                send_newsletter: document.getElementById('send_newsletter').checked,
-                is_public_administration: document.getElementById('is_public_administration').checked
-            };
-
-            // Enviar datos al backend
-            fetch('/api/customers', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                const resultDiv = document.getElementById('createCustomerResult');
-                
-                if (data.status === 'success') {
-                    resultDiv.className = 'result-message success';
-                    resultDiv.innerHTML = '<i class="fas fa-check-circle"></i> ' + data.message;
-                    
-                    // Limpiar formulario después del éxito
-                    setTimeout(() => {
-                        clearForm();
-                    }, 2000);
-                } else {
-                    resultDiv.className = 'result-message error';
-                    resultDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + data.message;
-                }
-                
-                resultDiv.style.display = 'block';
-                
-                // Auto-ocultar mensaje después de 8 segundos
-                setTimeout(() => {
-                    resultDiv.style.display = 'none';
-                }, 8000);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                const resultDiv = document.getElementById('createCustomerResult');
-                resultDiv.className = 'result-message error';
-                resultDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error de conexión: ' + error.message;
-                resultDiv.style.display = 'block';
-            })
-            .finally(() => {
-                // Restaurar botón
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            });
-        }
-
-        function switchSection(sectionId) {
-            // Actualizar navegación
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
-
-            // Mostrar sección correspondiente
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
-        }
-
-        // FAB functionality
-        document.querySelector('.fab').addEventListener('click', function() {
-            alert('Ayuda: Use los pasos del asistente para crear un cliente. Todos los campos marcados con * son obligatorios.');
         });
     </script>
 </body>
 </html>
-
